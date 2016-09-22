@@ -65,13 +65,14 @@
                 text:"<%=calInfo.current.month%>月全部",
                 className:"selectCurrentMonth",
                 action:function(instance,item){
-
+                    alert("不知道要做啥");
                 }
             },{
                 text:"关闭",
                 className:"closeCalendar",
                 action:function(instance,item){
                     instance.hide();
+                    console.log(item);
                 }
             },],
             valueTarget:input,

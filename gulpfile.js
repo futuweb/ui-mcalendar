@@ -45,8 +45,8 @@ var prodConfig = extend({},devConfig,{
                 warnings:false
             }
         }),
-        watch:false
     ],
+    watch:false
 });
 
 gulp.task('pack', function() {
