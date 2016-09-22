@@ -1,0 +1,148 @@
+/* css reset----------------------------------------------------------------- */
+html {
+  font-family: sans-serif; /* 1 */
+  -ms-text-size-adjust: 100%; /* 2 */
+  -webkit-text-size-adjust: 100%; /* 2 */
+}
+
+/**
+ * Remove the margin in all browsers (opinionated).
+ */
+
+body {
+  margin: 0;
+}
+/**
+ * 1. Remove the gray background on active links in IE 10.
+ * 2. Remove gaps in links underline in iOS 8+ and Safari 8+.
+ */
+
+a {
+  background-color: transparent; /* 1 */
+  -webkit-text-decoration-skip: objects; /* 2 */
+}
+
+/**
+ * Remove the outline on focused links when they are also active or hovered
+ * in all browsers (opinionated).
+ */
+
+a:active,
+a:hover {
+  outline-width: 0;
+}
+
+.futu-calendar ul,.futu-calendar div,.futu-calendar ul li{
+    padding: 0;
+    margin: 0;
+}
+.futu-calendar ul,.futu-calendar ul li{
+    list-style-type: none;
+}
+.futu-calendar ul{
+    display: -moz-box;
+    display: -webkit-box;
+    display: box;
+}
+
+.futu-calendar{
+    font-size: 14px;
+    font-family: Helvetica, Arial, sans-serif;
+}
+/* css reset----------------------------------------------------------------- */
+
+
+/* 显示年月条---------------------------------------------------------------- */
+.futu-calendar .weekdate ul li,.futu-calendar .regular-date ul li{
+    width: 1%;
+    -moz-box-flex: 1;
+    -webkit-box-flex: 1;
+    box-flex: 1;
+    text-align: center;
+    color: #121313;
+}
+
+.futu-calendar .time-bar{
+    background-color: #efeff4;
+    height: 42px;
+    line-height: 42px;
+    text-align: center;
+}
+.futu-calendar .time-bar span{
+    display: inline-block;
+    height: 42px;
+    position: relative;
+}
+.futu-calendar .time-bar span em{
+    display: block;
+    width: 9px;
+    height: 16px;
+    background: url(data:image/gif;base64,R0lGODlhOAAgANU6AMXZ8wpezMjb9AtfzM3e9S110wxfzBBizSly0tPi9idx0h9s0Ctz08ba8zF41BdnzyZw0sTY8x1r0NDg9cfa88rc9CNu0Rhnz8PY8x5r0C921CBt0U+L2jJ51BNkzs7f9dHh9Rxq0BZmzxRkzlCM2xVlziRv0cLX8i931CFt0TR61Q5hzRZmzhFizRJjzsvd9NTj9sze9Hup5NXj9nyp5M/f9SVw0ihy0jB31Bloz////wAAAAAAAAAAAAAAAAAAACH/C1hNUCBEYXRhWE1QPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4gPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgNS4zLWMwMTEgNjYuMTQ1NjYxLCAyMDEyLzAyLzA2LTE0OjU2OjI3ICAgICAgICAiPiA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPiA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtbG5zOnhtcE1NPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvbW0vIiB4bWxuczpzdFJlZj0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL3NUeXBlL1Jlc291cmNlUmVmIyIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M2IChXaW5kb3dzKSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDo0NDQwMzBCRTdGRjAxMUU2OThERkVBNTE2MzdFNzkxNyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDo0NDQwMzBCRjdGRjAxMUU2OThERkVBNTE2MzdFNzkxNyI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOjQ0NDAzMEJDN0ZGMDExRTY5OERGRUE1MTYzN0U3OTE3IiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjQ0NDAzMEJEN0ZGMDExRTY5OERGRUE1MTYzN0U3OTE3Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+Af/+/fz7+vn49/b19PPy8fDv7u3s6+rp6Ofm5eTj4uHg397d3Nva2djX1tXU09LR0M/OzczLysnIx8bFxMPCwcC/vr28u7q5uLe2tbSzsrGwr66trKuqqainpqWko6KhoJ+enZybmpmYl5aVlJOSkZCPjo2Mi4qJiIeGhYSDgoGAf359fHt6eXh3dnV0c3JxcG9ubWxramloZ2ZlZGNiYWBfXl1cW1pZWFdWVVRTUlFQT05NTEtKSUhHRkVEQ0JBQD8+PTw7Ojk4NzY1NDMyMTAvLi0sKyopKCcmJSQjIiEgHx4dHBsaGRgXFhUUExIREA8ODQwLCgkIBwYFBAMCAQAAIfkEAQAAOgAsAAAAADgAIAAABv9AnXBIJCY8paJySRyNYMyoFMAYeKRYXWtQoGS/n4yBkfhGQQjDZmKOAjKBDKAdxYQCGy/dWM189lExIVwzgDoEBwEMc4ZMGAgBLjV7AgUDB2WNZysDGhVtAAsGBQSaWC8MBil6WAAmAQsCplkNEgEQrEyVBiaMs1gYFgaeUQIPAQURv2YnDAE5n0oCHQMPsstmDSwDKtFDAiIDHdfY2TgDF94AkCLk5dklil4ACgYI7u/Z9QgNNni++ehgWHALxYAbpQLuIaCgEwAHAQ4kVPgFUQAHyhANcACQIpOHlyYScGBAQkePRABIMOBgohCVARScREkvgMkl9Ozh8yggjUxqN5AuuKRI4EIABDOJCLjAZee7SuicKiFg6QEbhRMecBkqxdgtZfkiQAhgbc8ECAMsJG0EwMIACFf3RLAASyogAQQtgDUUahRXQFQNLFhrplLETI0SJCpgl45GEqY4RPybmAQNUzI4IMYSBAA7) no-repeat;
+    background-size: 28px 16px;
+    position: absolute;
+    top: 13px;
+}
+
+/* 上一个月按钮 */
+.futu-calendar .time-bar span em.emLeft {
+    background-position: 0px 0px;
+    left: -30px;
+}
+/* 下一个月按钮 */
+.futu-calendar .time-bar span em.emRight {
+    background-position: -19px 0px ;
+    right: -30px;
+}
+/* 显示年月条---------------------------------------------------------------- */
+
+/* 日历部分------------------------------------------------------------------ */
+/* 星期部分 */
+.futu-calendar .weekdate{
+    font-size: 12px;
+    color: #959baa;
+    height: 22px;
+    line-height: 22px;
+    background-color: #efeff4;
+}
+
+.futu-calendar .regular-date ul li{
+    height: 30px;
+    padding: 6px 0;
+}
+
+.futu-calendar .regular-date ul li span{
+    display: inline-block;
+    vertical-align: top;
+    height: 30px;
+    width: 30px;
+    text-align: center;
+    line-height: 30px;
+    -moz-border-radius: 30px;
+    -webkit-border-radius: 30px;
+    border-radius: 30px;
+}
+
+/* 当前显示的日历中其他月份的日期 */
+.futu-calendar .regular-date li.othermonth{
+    color: #aab0bf;
+}
+
+/* 今天 */
+.futu-calendar .regular-date li.today span{
+    color: #1a89e7;
+    font-weight: 700;
+}
+
+/* selecteable */
+.futu-calendar .regular-date li.selectable span{
+    color: #121313;
+    background-color: #e7e7ee;
+}
+
+/* 选中的日期 */
+.futu-calendar .regular-date li.selected span{
+    color: #FFF;
+    background-color: #1876e5;
+    font-weight: 700;
+}
+/* 日历部分------------------------------------------------------------------ */

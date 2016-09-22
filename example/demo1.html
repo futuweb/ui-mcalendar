@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8"/>
+        <meta name="format-detection" content="telephone=no"/>
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <meta name="renderer" content="webkit">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" >
+        <title>测试日历控件</title>
+        <link rel="stylesheet" type="text/css" href="../src/ui-mcalendar.css"/>
+        <style type="text/css" media="screen">
+            .futu-calendar{
+                width: 95%;
+                margin: 0 auto;
+                border: 1px solid gray;
+            }
+        </style>
+    </head>
+    <body>
+        <input tpye="input" id="calendarValue"/>
+        <div class="wrapper"></div>
+    </body>
+    <script type="text/template" id="templatedemo">
+        <div class="futu-calendar">
+            <div class="tool-bar">
+                <span class="tool-bar-container">
+                    <a href="javascript:void(0)" class="selectCurrentMonth"><%=calInfo.current.month%>月全部</a>
+                    <a href="javascript:void(0)" class="selectAfterToday">今天后</a>
+                </span>
+            </div>
+            <div class="time-bar">
+                <span class="time-bar-container">
+                    <em class="emLeft"></em>
+                    <font class="current-date"><%=calInfo.current.year%>年<%=calInfo.current.month%>月</font>
+                    <em class="emRight"></em>
+                </span>
+            </div>
+            <div class="date-container">
+                <div class="weekdate">
+                    <ul>
+                        <li>日</li><li>一</li><li>二</li><li>三</li><li>四</li><li>五</li><li>六</li>
+                    </ul>
+                </div>
+                <div class="regular-date">
+                    <%_.each([0,1,2,3,4,5], function(i) {%>
+                        <ul>
+                            <%_.each([0,1,2,3,4,5,6],function(j){ var item = calInfo.list[j+i*7];%>
+                            <li date-index="item-<%=j+i*7%>" class="<%=((item.classList)||[]).join(" ")%>">
+                                <span><%=item.date%></span>
+                            </li>
+                            <%})%>
+                        </ul>
+                    <%});%>
+                </div>
+            </div>
+        </div>
+    </script>
+    <script type="text/javascript" src="../index.js"></script>
+    <script type="text/javascript">
+
+        var input = document.querySelector("#calendarValue");
+
+        var cal = new futuCalendar({
+            wrapper:".wrapper",
+            autohide:true,
+            valueTarget:input,
+            templateStr:document.querySelector("#templatedemo").innerHTML,
+            enableList:["2016-08-01","2016-08-02"],
+            defaultDate:new Date("2016-08-01"),
+            selectMonth:function(instance,info,offset){
+                // instance.setCliableList([
+                //     info.year+"-"+info.month+"-04",
+                //     info.year+"-"+info.month+"-05",
+                //     info.year+"-"+info.month+"-06",
+                //     info.year+"-"+info.month+"-09",
+                // ],function(item){
+                //     item.classList.add('selecteable');
+                // });
+            },
+            selectDateCallback:function(el,dataInfo){
+                console.log(dataInfo);
+            }
+        });
+
+        input.onfocus = function(){
+            cal.show();
+        };
+
+    </script>
+</html>

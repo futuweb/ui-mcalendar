@@ -1,0 +1,33 @@
+<div class="futu-calendar">
+    <div class="tool-bar">
+        <span class="tool-bar-container">
+            <a href="javascript:void(0)" class="selectCurrentMonth"><%=calInfo.current.month%>月全部</a>
+            <a href="javascript:void(0)" class="selectAfterToday">今天往后</a>
+        </span>
+    </div>
+    <div class="time-bar">
+        <span class="time-bar-container">
+            <em class="emLeft"></em>
+            <font class="current-date"><%=calInfo.current.year%>年<%=calInfo.current.month%>月</font>
+            <em class="emRight"></em>
+        </span>
+    </div>
+    <div class="date-container">
+        <div class="weekdate">
+            <ul>
+                {{ _.each(weekdate, function(item) { }}<li>{{=item}}</li>{{ }) }}
+            </ul>
+        </div>
+        <div class="regular-date">
+            <%_.each([0,1,2,3,4,5], function(i) {%>
+                <ul>
+                    <%_.each([0,1,2,3,4,5,6],function(j){ var item = calInfo.list[j+i*7];%>
+                    <li date-index="item-<%=j+i*7%>" class="<%=((item.classList)||[]).join(" ")%>">
+                        <span><%=item.date%></span>
+                    </li>
+                    <%})%>
+                </ul>
+            <%});%>
+        </div>
+    </div>
+</div>
