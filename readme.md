@@ -15,15 +15,15 @@ npm install ui-mcalendar
 支持页面直接引入、AMD、CommonJs的方式加载模块
 
 #### 调用
-1. 引入样式文件，或者自定义样式 
+1.引入样式文件，或者自定义样式 
 ```
 <link rel="stylesheet" type="text/css" href="ui-mcalendar/src/ui-mcalendar.css"/>
 ```
-2. 引入js，以直接引入为例
+2.引入js，以直接引入为例
 ```
 <script type="text/javascript" src="ui-mcalendar/index.js"></script>
 ```
-3. 实例化插件
+3.实例化插件
 HTML:
 ```
 <!--选择日期后值保存在这里-->
