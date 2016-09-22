@@ -51,6 +51,22 @@ a:hover {
 }
 /* css reset----------------------------------------------------------------- */
 
+/* 工具条部分---------------------------------------------------------------- */
+.futu-calendar .tool-bar{
+    background-color: #efeff4;
+    border-bottom: #d6d6dd 1px solid;
+    height: 42px;
+    line-height: 42px;
+    padding: 0 10px;
+}
+
+.futu-calendar .tool-bar a{
+    margin-right: 20px;
+    text-decoration: none;
+    color: #0a5ecc;
+    outline: none;
+}
+/* 工具条部分---------------------------------------------------------------- */
 
 /* 显示年月条---------------------------------------------------------------- */
 .futu-calendar .weekdate ul li,.futu-calendar .regular-date ul li{
