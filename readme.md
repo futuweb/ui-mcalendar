@@ -76,6 +76,7 @@ cal.show();
 
 ## 目录结构
 ![](asserts/1.png)
+
 `example`: 示例目录
 `src`:组件源码，commonjs模式，不可直接运行；ui-calendar.css 默认提供的样式
 `template`：日历模板
