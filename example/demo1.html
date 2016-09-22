@@ -15,6 +15,7 @@
                 margin: 0 auto;
                 border: 1px solid gray;
             }
+            fr.
         </style>
     </head>
     <body>
@@ -22,13 +23,8 @@
         <div class="wrapper"></div>
     </body>
     <script type="text/template" id="templatedemo">
-        <div class="futu-calendar">
-            <div class="tool-bar">
-                <span class="tool-bar-container">
-                    <a href="javascript:void(0)" class="selectCurrentMonth"><%=calInfo.current.month%>月全部</a>
-                    <a href="javascript:void(0)" class="selectAfterToday">今天后</a>
-                </span>
-            </div>
+       <div class="futu-calendar">
+            <div class="tool-bar"></div>
             <div class="time-bar">
                 <span class="time-bar-container">
                     <em class="emLeft"></em>
@@ -39,7 +35,7 @@
             <div class="date-container">
                 <div class="weekdate">
                     <ul>
-                        <li>日</li><li>一</li><li>二</li><li>三</li><li>四</li><li>五</li><li>六</li>
+                        {{ _.each(weekdate, function(item) { }}<li>{{=item}}</li>{{ }) }}
                     </ul>
                 </div>
                 <div class="regular-date">
@@ -64,19 +60,26 @@
         var cal = new futuCalendar({
             wrapper:".wrapper",
             autohide:true,
+            showToolBar:true,
+            toolList:[{
+                text:"<%=calInfo.current.month%>月全部",
+                className:"selectCurrentMonth",
+                action:function(instance,item){
+
+                }
+            },{
+                text:"关闭",
+                className:"closeCalendar",
+                action:function(instance,item){
+                    instance.hide();
+                }
+            },],
             valueTarget:input,
             templateStr:document.querySelector("#templatedemo").innerHTML,
             enableList:["2016-08-01","2016-08-02"],
             defaultDate:new Date("2016-08-01"),
             selectMonth:function(instance,info,offset){
-                // instance.setCliableList([
-                //     info.year+"-"+info.month+"-04",
-                //     info.year+"-"+info.month+"-05",
-                //     info.year+"-"+info.month+"-06",
-                //     info.year+"-"+info.month+"-09",
-                // ],function(item){
-                //     item.classList.add('selecteable');
-                // });
+
             },
             selectDateCallback:function(el,dataInfo){
                 console.log(dataInfo);

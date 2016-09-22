@@ -67,9 +67,9 @@ var BASE = {
 var DateUtil = {
     /**
      * [format 格式化日期]
-     * @param  {[String|Date]} utcString      [可实例化为Date对象的变量]
+     * @param  {<String|Date>} utcString      [可实例化为Date对象的变量]
      * @param  {[type]} pattern [日期格式]
-     * @return {[type]}         [description]
+     * @return {[type]}           [description]
      */
     getFormatDate: function(utcString, pattern) {
         if (!utcString) {
@@ -296,9 +296,13 @@ var CalendarUtil = {
         // 默认显示的日期
         defaultDate: new Date(),
 
+        toolList:[],
+
+        showToolBar:false,
+
         /**
          * [selectDateCallback 选中某个日期之后的回调]
-         * @param  {Element} el       [点击的日期的dom元素]
+         * @param  {NODE} el       [点击的日期的dom元素]
          * @param  {JSON} dateInfo [JSON对象]
          * @return {[type]}          [description]
          */
@@ -326,7 +330,7 @@ var CalendarUtil = {
             // 当前选中的日期
             normal: "date-item",
 
-            prominent: "selectable"
+            prominent: "selectable",
         }
     },
 
@@ -400,6 +404,10 @@ var CalendarUtil = {
             _option.enableList = option.enableList;
         }
 
+        _option.toolList = option.toolList || [];
+
+        _option.showToolBar = Boolean(option.showToolBar);
+
         // 预处理模板，主要是记性星期的名称初始化，以及可能存在的国际化处理
         _option.templateStr = CalendarUtil.preDealTemplate(_option.templateStr,_option);
 
@@ -460,17 +468,57 @@ var CalendarUtil = {
         // 完善日期信息
         instance.completeDayInfo(instance.calInfo, instance.currentSelectDate);
 
-        option.wrapper.innerHTML = _.template(option.templateStr)({
+        // 生成主体dom结构
+        var html = _.template(option.templateStr)({
             calInfo: calInfo
         });
+
+        // 生成工具条
+        instance.toolBarStr = this.createToolBar(instance);
+
+        var docfreg = document.createDocumentFragment();
+        var temp = document.createElement("div");
+        temp.innerHTML = html;
+        docfreg.appendChild(temp);
+
+        // 在加入文当前处理，提高效率
+        var toolBar = docfreg.querySelector(".tool-bar");
+        toolBar.innerHTML = instance.toolBarStr;
+        toolBar.style.display = option.showToolBar ? "block" : "none";
+
+        option.wrapper.innerHTML = "";
+        option.wrapper.appendChild(docfreg);
+        docfreg = temp = toolBar = null;
 
         // 保存实例
         instance.calendar = option.wrapper.querySelector(".futu-calendar");
     },
 
     /**
+     * [createToolBar description]
+     * @param {futuCalendar} instance [日历实例]
+     * @return {[type]}          [description]
+     */
+    createToolBar: function(instance) {
+        var toolList = instance.option.toolList;
+
+        var str = "";
+        toolList.forEach(function(item, i) {
+            item.className = item.className + " tool-item";
+            str = str + "<a href='javascript:void(0)' tool-id='"+i+"'  class='"+item.className+"'>" +
+                            item.text +
+                        "</a>";
+
+        });
+
+        return _.template(str)({
+            calInfo: instance.calInfo
+        });
+    },
+
+    /**
      * [setCalendar 根据日期或者选中的日期元素重新设定当前日期变量]
-     * @param {[type]} instance [日历实例]
+     * @param {futuCalendar} instance [日历实例]
      * @param {[type]} target   [element或者日期对象]
      * @param {Function} callback [回调函数]
      */
@@ -499,7 +547,7 @@ var CalendarUtil = {
 
     /**
      * [bindEvents 进行事件监听]
-     * @param  {futuCalendar} instance [实例]
+     * @param  {实例} instance [实例]
      * @return {[type]}        [description]
      */
     bindEvents: function(instance) {
@@ -519,6 +567,12 @@ var CalendarUtil = {
                 instance.goNextMonth(option.selectMonth);
 
             // 点击日期
+            } else if(classList.contains('tool-item')){
+                var func = instance.option.toolList[target.getAttribute("tool-id") - 0].action;
+                if(_.isFunction(func)) {
+                    func(instance,target);
+                }
+
             } else {
                 target = target.tagName.toLowerCase() == "span" ? target.parentNode : target;
                 classList = target.classList;
@@ -692,7 +746,6 @@ _.extend(futuCalendar.prototype, {
         }
 
         dateList.map(function(item) {
-            var d;
             item.classList = [];
 
             // 判断是否为可选择
@@ -702,7 +755,7 @@ _.extend(futuCalendar.prototype, {
                 item.isCliable = true;
             } else {
                 // 部分可点击，则将日期准换为yyyy-MM-dd形式在enableMap中查找
-                d = new Date(item.year, item.month - 1, item.date);
+                var d = new Date(item.year, item.month - 1, item.date);
                 if (enableMap[DateUtil.getFormatDate(d, "yyyy-MM-dd")]) {
                     item.classList = [classMap.normal, classMap.prominent];
                     item.isCliable = true;
@@ -715,7 +768,7 @@ _.extend(futuCalendar.prototype, {
             if (Boolean(item.isLastMonth) || Boolean(item.isNextMonth)) {
                 item.classList.push(classMap.othermonth);
             } else {
-                d = new Date(item.year, item.month - 1, item.date);
+                var d = new Date(item.year, item.month - 1, item.date);
                 item.classList.push(classMap.currentmonth);
 
                 // 今天
@@ -755,7 +808,7 @@ _.extend(futuCalendar.prototype, {
         // 如果存在回调，则将对应日期的dom元素返回
         if (_.isFunction(callback)) {
             var that = this;
-            list.forEach(function(item) {
+            list.forEach(function(item, i) {
                 callback(that.getItem(item));
             });
         }
