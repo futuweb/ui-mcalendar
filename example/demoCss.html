@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8"/>
+        <meta name="format-detection" content="telephone=no"/>
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <meta name="renderer" content="webkit">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" >
+        <title>测试日历控件-无需手动加载css</title>
+        <style type="text/css" media="screen">
+            .futu-calendar{
+                margin: 0 auto;
+            }
+            fr.
+        </style>
+    </head>
+    <body>
+        <input tpye="input" id="calendarValue" placeholder="请选择" />
+        <div class="wrapper"></div>
+    </body>
+    <script type="text/template" id="templatedemo">
+       <div class="futu-calendar">
+            <div class="tool-bar"></div>
+            <div class="time-bar">
+                <span class="time-bar-container">
+                    <em class="emLeft"></em>
+                    <font class="current-date"><%=calInfo.current.year%>年<%=calInfo.current.month%>月</font>
+                    <em class="emRight"></em>
+                </span>
+            </div>
+            <div class="date-container">
+                <div class="weekdate">
+                    <ul>
+                        {{ _.each(weekdate, function(item) { }}<li>{{=item}}</li>{{ }) }}
+                    </ul>
+                </div>
+                <div class="regular-date">
+                    <%_.each([0,1,2,3,4,5], function(i) {%>
+                        <ul>
+                            <%_.each([0,1,2,3,4,5,6],function(j){ var item = calInfo.list[j+i*7];%>
+                            <li date-index="item-<%=j+i*7%>" class="<%=((item.classList)||[]).join(" ")%>">
+                                <span><%=item.date%></span>
+                            </li>
+                            <%})%>
+                        </ul>
+                    <%});%>
+                </div>
+            </div>
+        </div>
+    </script>
+    <script type="text/javascript" src="../indexCss.js"></script>
+    <script type="text/javascript">
+
+        var input = document.querySelector("#calendarValue");
+        var input2 = document.querySelector("#calendarValue2");
+
+        var cal = new futuCalendar({
+            wrapper:".wrapper",
+            initshow: false,
+            autohide:true,
+            hasMask:true,
+            showToolBar:true,
+            toolList:[{
+                text:"<%=calInfo.current.month%>月全部",
+                className:"selectCurrentMonth",
+                action:function(instance,item){
+                    alert("不知道要做啥");
+                }
+            },{
+                text:"关闭",
+                className:"closeCalendar",
+                action:function(instance,item){
+                    instance.hide(function (instance) {
+                        console.log(instance);
+                    });
+                    console.log(item);
+                }
+            }],
+            valueTarget:input,
+            templateStr:document.querySelector("#templatedemo").innerHTML,
+            enableList:["2016-09-01","2016-09-02"],
+            selectMonth:function(instance,info,offset){
+                console.log(info);
+            },
+            selectDateCallback:function(el,dataInfo){
+                console.log(dataInfo);
+            }
+        });
+
+    </script>
+</html>

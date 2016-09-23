@@ -15,13 +15,18 @@ npm install ui-mcalendar
 支持页面直接引入、AMD、CommonJs的方式加载模块
 
 #### 调用
-1.引入样式文件，或者自定义样式 
+1.引入样式文件，或者自定义样式;如果引用的js为`indexCss.js`则无需手动引入css文件 
 ```
 <link rel="stylesheet" type="text/css" href="ui-mcalendar/src/ui-mcalendar.css"/>
 ```
+
 2.引入js，以直接引入为例
 ```
 <script type="text/javascript" src="ui-mcalendar/index.js"></script>
+```
+或者直接引入包含了css文件的js，则无需手动引入`ui-mcalendar.css`
+```
+<script type="text/javascript" src="ui-mcalendar/indexCss.js"></script>
 ```
 3.实例化插件
 HTML:
@@ -46,6 +51,7 @@ var cal = new futuCalendar({
 });
 cal.show();
 ```
+
 一个完整的配置如下：
 ```
  var cal = new futuCalendar({
@@ -74,14 +80,18 @@ cal.show();
 });
 ```
 
+#### 效果图
+![](asserts/demo1.png)
+
 ## 目录结构
-![](asserts/1.png)
+![](asserts/01.png) 
 
 `example`: 示例目录
-`src`:组件源码，commonjs模式，不可直接运行；ui-calendar.css 默认提供的样式
+`src`:index.js组件源码，commonjs模式，不可直接运行；ui-calendar.css 默认提供的样式
 `template`：日历模板
 `gulpfile`：打包配置
-`index.js`：打包后的源码
+`index.js`：打包后的源码,不包含css，使用时可手动引入`ui-calendar.css`
+`indexCss.js`：打包后的源码,包含css，使用时**无需**手动引入`ui-calendar.css`
 `readme.md`：说明文档
 
 ## API
@@ -266,6 +276,11 @@ return：Element,对应的日期DOM元素
 3. 依赖`underscore.js`,开发过程中已进行打包，无需重复引入
 
 ## 版本记录
+### 1.0.5 2016-09-23
+- 修正readme文件
+
+### 1.0.4 2016-09-23
+- 提供了打包了css的版本
 
 ### 1.0.3 2016-09-23
 - 修复bug，增加配置参数
