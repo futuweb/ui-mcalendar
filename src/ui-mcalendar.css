@@ -51,6 +51,27 @@ a:hover {
 }
 /* css reset----------------------------------------------------------------- */
 
+/* mask---------------------------------------------------------------------- */
+.futu-calendar-mask{
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    z-index: 1200;
+    background-color: rgba(0,0,0,.5);
+    display: none;
+    z-index: 10;
+}
+.futu-calendar.maskable{
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+}
+/* mask---------------------------------------------------------------------- */
+
 /* 工具条部分---------------------------------------------------------------- */
 .futu-calendar .tool-bar{
     background-color: #efeff4;
@@ -121,6 +142,9 @@ a:hover {
     background-color: #efeff4;
 }
 
+.futu-calendar .regular-date{
+    background-color: white;
+}
 .futu-calendar .regular-date ul li{
     height: 30px;
     padding: 6px 0;

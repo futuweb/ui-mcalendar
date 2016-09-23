@@ -126,8 +126,18 @@ cal.show();
 
     - `config.defaultDate`
        类型：Date
-       说明：初次显示日历时，被选中的日期。
-	   默认值：当前日期对象。
+       说明：初次显示日历时，被选中的日期，如果不设置则关联的`valueTarget`不设置值
+	   默认值：空。
+
+	- `config.initshow`
+	   类型：Boolean
+       说明：初始化时，是否立即显示日历。
+	   默认值：false，默认不显示日历。
+
+	- `config.initshow`
+	   类型：Boolean
+       说明：是否显示mask。
+	   默认值：false，默认不显示遮罩。
 
     - `config.toolList`
        类型：Array
@@ -166,15 +176,89 @@ cal.show();
 	   默认值:空。
 
 #### 2. `futuCalendar#show(callback)`
+说明：全局方法，显示日历,实例化日历时默认不显示，可调用此方法来显示，
+参数：显示日历时的回调函数，回调函数的参数为日历实例，
+return：`this`，当前日历实例，
+demo:
+```
+cal.show(function(instance){
+    console.log("这是日历对象",instance);
+});
+```
 #### 3. `futuCalendar#hide(callback)`
+说明：全局方法，隐藏日历，
+参数：显示日历时的回调函数，回调函数的参数为日历实例，
+return：`this`，当前日历实例，
+demo:
+```
+cal.hide(function(instance){
+    console.log("这是日历对象",instance);
+});
+```
 #### 4. `futuCalendar#getDateInfo()`
-#### 5. `futuCalendar#goLastMonth(callback)`
-#### 6. `futuCalendar#goNextMonth(callback)`
-#### 7. `futuCalendar#setDate(date, callback)`
-#### 8. `futuCalendar#setCliableList(list,callback)`
-#### 9. `futuCalendar#getItemIndexByDate(date)`
-#### 9. `futuCalendar#getItem(date)`
+说明：全局方法，获取当前选择的日期
+return：JSON对象，日期信息，格式为`{date:Date对象，dateStr：符合option.dataFormat格式的时间字符串}`；
+demo:
+```
+var info = cal.getDateInfo();
+console.log(info);
 
+```
+![](asserts/2.png)
+
+#### 5. `futuCalendar#goLastMonth(callback)`
+说明：切换到上一个月的日历信息
+参数：切换后的回调函数，回调函数的参数为日历实例，
+return：`this`，当前日历实例，
+demo:
+```
+cal.goLastMonth(function(instance){
+    console.log("你切换到了上个月，这是日历对象",instance);
+});
+```
+
+#### 6. `futuCalendar#goNextMonth(callback)`
+说明：切换到下一个月的日历信息
+参数：切换后的回调函数，回调函数的参数为日历实例，
+return：`this`，当前日历实例，
+demo:
+```
+cal.goLastMonth(function(instance){
+    console.log("你切换到了下个月，这是日历对象",instance);
+});
+```
+
+#### 7. `futuCalendar#setDate(date, callback)`
+说明：设置日历的日期，即设置那一天被选中
+参数：`date`为Date对象或者可以被实例化为Date对象的变量，`callback`为切换后的回调函数，回调函数的参数为日历实例，
+return：`this`，当前日历实例，
+demo：
+```
+cal.setDate(date，function(instance){
+    console.log("你切换到日期，这是日历对象",instance);
+});
+```
+
+#### 8. `futuCalendar#setCliableList(list,callback)`
+说明：重新设置可以点击的日期，会覆盖enableList中的配置
+参数：`list`为日期数组，如`["2016-12-01","2016-12-02"]`或者`[new Date("2016-12-01")]`,数组中元素需要可以实例化为Date对象;callback为回调函数，函数参数为数组中日期所对应的日期DOM元素。
+demo：
+```
+// 设置"2016-09-22","2016-09-23"可点击，并将对应dom字体颜色设置为red；
+cal.setCliableList(["2016-09-22","2016-09-23"],function(item){
+    item.style.color = "red";
+});
+```
+
+#### 9. `futuCalendar#getItemIndexByDate(date)`
+说明：根据日期获取指定元素的索引
+参数：`date`为Date对象或者可以被实例化为Date对象的变量。
+return：Number,返回该日期在42个日期元素中的索引。
+
+#### 10. `futuCalendar#getItem(date)`
+说明：根据日期或者索引获取指定元素
+参数：当date为日期时，如果当前日期未在当前日历上显示，则返回空；当date为数值时，则返回42个日期元素中的指定dom元素。
+return：Element,对应的日期DOM元素
 
 ## 开发
 1. 源码位于src/index.js，开发完成后在ui-mcalendar目录下运营`gulp`命令，生成根目录下的index.js。
@@ -182,6 +266,12 @@ cal.show();
 3. 依赖`underscore.js`,开发过程中已进行打包，无需重复引入
 
 ## 版本记录
+
+### 1.0.3 2016-09-23
+- 修复bug，增加配置参数
+
+### 1.0.2 2016-09-22
+- 修复bug，增加配置参数
 
 ### 1.0.0 2016-09-22
 - 初始化版本，完成代码及文档

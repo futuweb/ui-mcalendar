@@ -11,15 +11,13 @@
         <link rel="stylesheet" type="text/css" href="../src/ui-mcalendar.css"/>
         <style type="text/css" media="screen">
             .futu-calendar{
-                width: 95%;
                 margin: 0 auto;
-                border: 1px solid gray;
             }
             fr.
         </style>
     </head>
     <body>
-        <input tpye="input" id="calendarValue"/>
+        <input tpye="input" id="calendarValue" placeholder="请选择" />
         <div class="wrapper"></div>
     </body>
     <script type="text/template" id="templatedemo">
@@ -56,10 +54,13 @@
     <script type="text/javascript">
 
         var input = document.querySelector("#calendarValue");
+        var input2 = document.querySelector("#calendarValue2");
 
         var cal = new futuCalendar({
             wrapper:".wrapper",
+            initshow: false,
             autohide:true,
+            hasMask:true,
             showToolBar:true,
             toolList:[{
                 text:"<%=calInfo.current.month%>月全部",
@@ -71,14 +72,15 @@
                 text:"关闭",
                 className:"closeCalendar",
                 action:function(instance,item){
-                    instance.hide();
+                    instance.hide(function (instance) {
+                        console.log(instance);
+                    });
                     console.log(item);
                 }
-            },],
+            }],
             valueTarget:input,
             templateStr:document.querySelector("#templatedemo").innerHTML,
-            enableList:["2016-08-01","2016-08-02"],
-            defaultDate:new Date("2016-08-01"),
+            enableList:["2016-09-01","2016-09-02"],
             selectMonth:function(instance,info,offset){
                 console.log(info);
             },
@@ -86,10 +88,6 @@
                 console.log(dataInfo);
             }
         });
-
-        input.onfocus = function(){
-            cal.show();
-        };
 
     </script>
 </html>

@@ -287,6 +287,9 @@ var CalendarUtil = {
         // 选择某个日期之后自动隐藏
         autohide: true,
 
+        // 初始化时是否直接显示
+        initshow: false,
+
         // 显示时的日期格式
         dataFormat: "yyyy-MM-dd",
 
@@ -294,11 +297,13 @@ var CalendarUtil = {
         enableList: "all",
 
         // 默认显示的日期
-        defaultDate: new Date(),
+        defaultDate: "",
 
         toolList:[],
 
         showToolBar:false,
+
+        hasMask:false,
 
         /**
          * [selectDateCallback 选中某个日期之后的回调]
@@ -408,6 +413,10 @@ var CalendarUtil = {
 
         _option.showToolBar = Boolean(option.showToolBar);
 
+        _option.initshow = _option.initshow || Boolean(option.initshow);
+
+        _option.hasMask = _option.hasMask || Boolean(option.hasMask);
+
         // 预处理模板，主要是记性星期的名称初始化，以及可能存在的国际化处理
         _option.templateStr = CalendarUtil.preDealTemplate(_option.templateStr,_option);
 
@@ -444,7 +453,7 @@ var CalendarUtil = {
 
         // 显示日期，用于确定要显示的月
         // 如果未传，如果未传则取当前用户选中的日期，其次是用户最初设定的日期
-        var d = date || instance.currentSelectDate || option.defaultDate;
+        var d = date || instance.currentSelectDate || option.defaultDate || new Date();
 
         // 获取当前显示出来的日历中包含的日期
         var month = DateUtil.getCalendarInfo(d.getFullYear(), d.getMonth() + 1);
@@ -486,8 +495,20 @@ var CalendarUtil = {
         toolBar.innerHTML = instance.toolBarStr;
         toolBar.style.display = option.showToolBar ? "block" : "none";
 
-        option.wrapper.innerHTML = "";
-        option.wrapper.appendChild(docfreg);
+        // 移除已经存在dom元素
+        var exitsInstaceDom = option.wrapper.querySelector(".futu-calendar");
+        exitsInstaceDom && option.wrapper.removeChild(exitsInstaceDom);
+
+        if(option.hasMask) {
+            docfreg.querySelector(".futu-calendar").classList.add("maskable");
+
+            var m = option.wrapper.querySelector(".futu-calendar-mask");
+            !m && option.wrapper.appendChild(this.createMask());
+            instance.mask = option.wrapper.querySelector(".futu-calendar-mask");
+        }
+
+        // 加入新元素
+        option.wrapper.appendChild(docfreg.children[0].children[0]);
         docfreg = temp = toolBar = null;
 
         // 保存实例
@@ -516,6 +537,12 @@ var CalendarUtil = {
         });
     },
 
+    createMask: function  (instance) {
+        var mask = document.createElement("div");
+        mask.className = "futu-calendar-mask";
+        return mask;
+    },
+
     /**
      * [setCalendar 根据日期或者选中的日期元素重新设定当前日期变量]
      * @param {futuCalendar} instance [日历实例]
@@ -524,9 +551,13 @@ var CalendarUtil = {
      */
     setCalendar: function(instance,target,callback){
 
+        var targetEle;
+
         if (_.isDate(target)) {
             instance.currentSelectDate = target;
+            targetEle = instance.getItem(target);
         } else if (_.isElement(target)) {
+            targetEle = target;
             var dataIndex = target.getAttribute("date-index").split("-")[1] - 0;
             var dateInfo = instance.calInfo.list[dataIndex];
             instance.currentSelectDate = new Date(dateInfo.year, dateInfo.month - 1, dateInfo.date);
@@ -537,7 +568,8 @@ var CalendarUtil = {
         // 添加选中样式
         var selected = instance.option.wrapper.querySelector(".selected");
         selected && selected.classList.remove(instance.option.classMap.selected);
-        target.classList.add(instance.option.classMap.selected);
+
+        targetEle.classList.add(instance.option.classMap.selected);
 
         // 如果存在与日历绑定的元素，则将值设置进入该元素
         BASE.setElementValue(instance.option.valueTarget,instance.getDateInfo().dateStr);
@@ -585,22 +617,41 @@ var CalendarUtil = {
                 var dataIndex = target.getAttribute("date-index").split("-")[1] - 0;
                 var dateInfo = instance.calInfo.list[dataIndex];
 
-                // 设定了只有部分元素可点击，但当前元素不可点击
-                if (!dateInfo.isCliable) {
-                    return;
+                if (dateInfo.isCliable) {
+                    // 点击日期之后，需要重新设置日期变量，主要是currentSelectDate字段及先关样式
+                    that.setCalendar(instance, target, function() {});
+                    instance.option.selectDateCallback(target, instance.getDateInfo());
                 }
 
-                // 点击日期之后，需要重新设置日期变量，主要是currentSelectDate字段及先关样式
-                that.setCalendar(instance, target, function() {
-                    instance.option.selectDateCallback(target, instance.getDateInfo());
-                    // 设置了自动隐藏，则选中日期之后隐藏
-                    if (instance.option.autohide) {
-                        instance.hide();
-                    }
-                });
+                // 设置了自动隐藏，则选中日期之后隐藏
+                if (instance.option.autohide) {
+                    instance.hide();
+                }
 
             }
 
+            e.stopPropagation(true);
+
+        });
+
+        // 给绑定的输入框绑定事件
+        var eventType = instance.option.valueTarget &&
+                        instance.option.valueTarget.tagName.toLowerCase() == "input" ? "focus":"tap";
+        BASE.addEventLister(instance.option.valueTarget,eventType,function(e){
+            instance.show();
+            e.stopPropagation(true);
+        });
+
+        // 点击其他地方时，隐藏日历
+        BASE.addEventLister(document, "tap", function(e) {
+            var cal = e.target.closest('.futu-calendar');
+            document.querySelectorAll(".futu-calendar").forEach(function(item) {
+                if (cal != item) {
+                    item.style.display = "none";
+                    var mask = item.parentNode.querySelector(".futu-calendar-mask");
+                    mask && (mask.style.display = "none");
+                }
+            });
         });
     }
 };
@@ -615,7 +666,7 @@ function futuCalendar(option){
     this.option = CalendarUtil.initOption(option);
 
     // 当前选中的日期
-    this.currentSelectDate = this.option.defaultDate;
+    this.currentSelectDate = this.option.defaultDate || new Date();
 
     // 生成组件dom结构并插入具体容器中
     CalendarUtil.generateHTML(this);
@@ -626,10 +677,13 @@ function futuCalendar(option){
     // 初始化及触发的事件
     this.option.selectMonth(this,this.calInfo.current,0);
 
-    // 初始化时默认隐藏
-    this.calendar.style.display ="none";
+    // 初始化时默认隐藏与否
+    this.option.initshow
+    this.calendar.style.display = this.option.initshow ? "block":"none";
 
-    BASE.setElementValue(this.option.valueTarget,DateUtil.getFormatDate(this.option.defaultDate,this.option.dataFormat));
+    // 是否显示默认的值
+    BASE.setElementValue(this.option.valueTarget,
+            DateUtil.getFormatDate(this.option.defaultDate,this.option.dataFormat));
 }
 
 /**
@@ -649,6 +703,9 @@ _.extend(futuCalendar.prototype, {
         }
 
         this.calendar.style.display = "block";
+        if (!!this.mask) {
+           this.mask.style.display = "block";
+        }
         _.isFunction(callback) && callback(this);
         return this;
     },
@@ -660,6 +717,9 @@ _.extend(futuCalendar.prototype, {
      */
     hide: function(callback) {
         this.calendar.style.display = "none";
+        if (!!this.mask) {
+           this.mask.style.display = "none";
+        }
         _.isFunction(callback) && callback(this);
         return this;
     },
@@ -711,18 +771,25 @@ _.extend(futuCalendar.prototype, {
     },
 
     /**
-     * [setDate 设置日历的日期]
+     * [setDate 设置日历的日期,该日期被选中]
      * @param {[type]}   date     [回调函数]
      * @param {Function} callback [description]
      */
     setDate: function(date, callback) {
 
+        // 如果该日期为当月日期，则直接改变当前日历的选中项即可
         if (date.getFullYear() == this.calInfo.current.year &&
             date.getMonth() + 1 == this.calInfo.current.month) {
             CalendarUtil.setCalendar(this, date);
+
+        // 如果在他月，则重新渲染日期
         } else {
+            this.currentSelectDate = _.isDate(date) ? date : new Date(date);
             CalendarUtil.generateHTML(this, date);
         }
+
+        // 设置绑定的input等元素的值
+        BASE.setElementValue(this.option.valueTarget,this.getDateInfo().dateStr);
 
         // 回调
         _.isFunction(callback) && callback(this);
@@ -746,12 +813,11 @@ _.extend(futuCalendar.prototype, {
         }
 
         dateList.map(function(item) {
-            item.classList = [];
+            item.classList = [classMap.normal];
 
             // 判断是否为可选择
             // 全部可点击
             if (enableList === "all") {
-                item.classList = [classMap.normal];
                 item.isCliable = true;
             } else {
                 // 部分可点击，则将日期准换为yyyy-MM-dd形式在enableMap中查找
