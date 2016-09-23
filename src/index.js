@@ -9,7 +9,7 @@
  */
 
 var _ = require("underscore");
-require("./ui-mcalendar.css");
+// require("./ui-mcalendar.css");
 
 /**
  * [BASE 普通工具方法]
