@@ -9,7 +9,7 @@
  */
 
 var _ = require("underscore");
-// require("./ui-mcalendar.css");
+require("./ui-mcalendar.css");
 
 /**
  * [BASE 普通工具方法]
@@ -636,9 +636,7 @@ var CalendarUtil = {
         });
 
         // 给绑定的输入框绑定事件
-        var eventType = instance.option.valueTarget &&
-                        instance.option.valueTarget.tagName.toLowerCase() == "input" ? "focus":"tap";
-        BASE.addEventLister(instance.option.valueTarget,eventType,function(e){
+        BASE.addEventLister(instance.option.valueTarget,"tap",function(e){
             instance.show();
             e.stopPropagation(true);
         });
