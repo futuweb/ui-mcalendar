@@ -41,7 +41,8 @@ var BASE = {
         }
 
         if (eventType.toLowerCase() === "tap") {
-            eventType = typeof window.ontouchstart != "undefined" ? "touchstart" : "click";
+            eventType = "click";
+            // eventType = typeof window.ontouchstart != "undefined" ? "touchstart" : "click";
         }
 
         ele.addEventListener(eventType, callback);
@@ -599,13 +600,14 @@ var CalendarUtil = {
             } else if (classList.contains("emRight")) {
                 instance.goNextMonth(option.selectMonth);
 
-            // 点击日期
+            // 点击工具栏
             } else if(classList.contains('tool-item')){
                 var func = instance.option.toolList[target.getAttribute("tool-id") - 0].action;
                 if(_.isFunction(func)) {
                     func(instance,target);
                 }
 
+            // 点击日期
             } else {
                 target = target.tagName.toLowerCase() == "span" ? target.parentNode : target;
                 classList = target.classList;
@@ -937,7 +939,7 @@ _.extend(futuCalendar.prototype, {
         if (_.isNumber(date) && date < 42) {
             index = date;
 
-            //出入的是日期
+            //传入的是日期
         } else {
             index = this.getItemIndexByDate(date)
         }
