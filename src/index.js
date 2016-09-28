@@ -9,7 +9,7 @@
  */
 
 var _ = require("underscore");
-// require("./ui-mcalendar.css");
+require("./ui-mcalendar.css");
 
 /**
  * [BASE 普通工具方法]
@@ -645,8 +645,13 @@ var CalendarUtil = {
 
         // 点击其他地方时，隐藏日历
         BASE.addEventLister(document, "tap", function(e) {
-            var cal = e.target.closest('.futu-calendar');
-            document.querySelectorAll(".futu-calendar").forEach(function(item) {
+            var cal = null;
+
+            if (e.target.closest) {
+                cal = e.target.closest('.futu-calendar');
+            }
+
+            _.each(document.querySelectorAll(".futu-calendar"), function(item) {
                 if (cal != item) {
                     item.style.display = "none";
                     var mask = item.parentNode.querySelector(".futu-calendar-mask");
@@ -857,7 +862,7 @@ _.extend(futuCalendar.prototype, {
     /**
      * [setCliableList 设置可以进行点击的日期]
      */
-    setCliableList: function(list,callback){
+    setCliableList: function(list,callback,showRightNow){
 
         this.option.enableList = list;
 
@@ -871,6 +876,12 @@ _.extend(futuCalendar.prototype, {
 
         /*重新渲染，这里设计的不太好*/
         CalendarUtil.generateHTML(this,new Date(this.calInfo.current.year,this.calInfo.current.month - 1,1));
+
+        if(Boolean(showRightNow)){
+            this.show();
+        }else{
+            this.hide();
+        }
 
         // 如果存在回调，则将对应日期的dom元素返回
         if (_.isFunction(callback)) {

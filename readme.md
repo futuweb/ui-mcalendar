@@ -249,15 +249,15 @@ cal.setDate(date，function(instance){
 });
 ```
 
-#### 8. `futuCalendar#setCliableList(list,callback)`
+#### 8. `futuCalendar#setCliableList(list,callback,showRightNow)`
 说明：重新设置可以点击的日期，会覆盖enableList中的配置
-参数：`list`为日期数组，如`["2016-12-01","2016-12-02"]`或者`[new Date("2016-12-01")]`,数组中元素需要可以实例化为Date对象;callback为回调函数，函数参数为数组中日期所对应的日期DOM元素。
+参数：`list`为日期数组，如`["2016-12-01","2016-12-02"]`或者`[new Date("2016-12-01")]`,数组中元素需要可以实例化为Date对象;callback为回调函数，函数参数为数组中日期所对应的日期DOM元素；showRightNow表示设置完成之后是否理解显示日历，默认不显示；showRightNow为true时则设置完成之后立即显示日历。
 demo：
 ```
-// 设置"2016-09-22","2016-09-23"可点击，并将对应dom字体颜色设置为red；
+// 设置"2016-09-22","2016-09-23"可点击，并将对应dom字体颜色设置为red,并且立即显示；
 cal.setCliableList(["2016-09-22","2016-09-23"],function(item){
     item.style.color = "red";
-});
+},true);
 ```
 
 #### 9. `futuCalendar#getItemIndexByDate(date)`
@@ -276,6 +276,10 @@ return：Element,对应的日期DOM元素
 3. 依赖`underscore.js`,开发过程中已进行打包，无需重复引入
 
 ## 版本记录
+
+### 1.0.9 2016-09-27
+- 处理forEach不兼容的问题，使用underscore的each方法代替
+- 扩展`setCliableList`参数以便于用户设置日历是否立即可见
 
 ### 1.0.8 2016-09-26
 - 使用click代理tap事件，解决点击击穿问题
