@@ -9,7 +9,7 @@
  */
 
 var _ = require("underscore");
-require("./ui-mcalendar.css");
+// require("./ui-mcalendar.css");
 
 /**
  * [BASE 普通工具方法]
@@ -510,7 +510,12 @@ var CalendarUtil = {
         }
 
         // 加入新元素
-        option.wrapper.appendChild(docfreg.children[0].children[0]);
+        if (docfreg.children) {
+            option.wrapper.appendChild(docfreg.children[0].children[0]);
+        } else {
+            option.wrapper.appendChild(docfreg.childNodes[0].childNodes[0]);
+        }
+
         docfreg = temp = toolBar = null;
 
         // 保存实例

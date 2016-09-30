@@ -1,6 +1,6 @@
 {
   "name": "ui-mcalendar",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "日期组件",
   "main": "webpack.config.js",
   "directories": {

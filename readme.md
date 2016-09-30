@@ -277,6 +277,9 @@ return：Element,对应的日期DOM元素
 
 ## 版本记录
 
+### 1.0.10 2016-09-31
+- 解决document.children属性不兼容的问题，使用childNode兼容
+
 ### 1.0.9 2016-09-27
 - 处理forEach不兼容的问题，使用underscore的each方法代替
 - 扩展`setCliableList`参数以便于用户设置日历是否立即可见

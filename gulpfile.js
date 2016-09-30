@@ -12,7 +12,7 @@ var devConfig = {
     output: {
         library: 'futuCalendar',
         libraryTarget: 'umd',
-        filename: './indexCss.js'
+        filename: './index.js'
     },
     resolve: {
         modulesDirectories: ["./node_modules"]
