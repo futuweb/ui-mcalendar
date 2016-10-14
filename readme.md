@@ -7,8 +7,7 @@
 ## 安装
 
 ```sh
-npm install git+http://gitlab.futunn.com/webpackage/ui-mcalendar.git#1.0.0
-npm install ui-mcalendar
+ npm install ui-mcalendar
 ```
 
 ## 使用
