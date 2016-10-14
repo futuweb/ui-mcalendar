@@ -6,6 +6,7 @@
  * 1.切换年
  * 2.国际化
  * 3.日历从周一还是周日开始
+ *
  */
 
 var _ = require("underscore");
@@ -59,7 +60,22 @@ var BASE = {
             var attr = ["input", "textarea"].indexOf(tagName) > -1 ? "value" : "innerHTML";
             ele[attr] = value;
         }
-    }
+    },
+
+    /**
+     * [removeItemsClass 移除容器中的子元素的指定class]
+     * @param  {Element} wrapper   [容器]
+     * @param  {String}  className [className]
+     * @return {[type]}            [description]
+     */
+    removeItemsClass: function(wrapper, className){
+        if(!(wrapper && className)){
+            return;
+        }
+         _.each(wrapper.querySelectorAll("."+className),function(item) {
+            item.classList.remove(className);
+        });
+    },
 };
 
 /**
@@ -69,8 +85,8 @@ var BASE = {
 var DateUtil = {
     /**
      * [format 格式化日期]
-     * @param  {<String|Date>} utcString      [可实例化为Date对象的变量]
-     * @param  {[type]} pattern [日期格式]
+     * @param  {Date} utcString   [可实例化为Date对象的变量,String 或者Date]
+     * @param  {[type]} pattern   [日期格式]
      * @return {[type]}           [description]
      */
     getFormatDate: function(utcString, pattern) {
@@ -96,7 +112,8 @@ var DateUtil = {
 
             // 时间字符串
             if (typeof utcString == "string") {
-                //火狐浏览器不支持new Date("2014-12-12 12:12:12")的形式，只能使用 new Date("2014/12/12 12:12:12")
+                //火狐浏览器不支持new Date("2014-12-12 12:12:12")的形式，
+                //只能使用 new Date("2014/12/12 12:12:12")
                 utcString = utcString.replace(/-/gi, "/");
             }
 
@@ -127,7 +144,9 @@ var DateUtil = {
 
     /**
      * [sameDate 判断是否为同一天]
-     * @return {[type]} [description]
+     * @param  {Date} d1 [日期对象]
+     * @param  {Date} d2 [日期对象]
+     * @return {[type]}    [description]
      */
     sameDate: function(d1, d2) {
         if (_.isDate(d1) && _.isDate(d2)) {
@@ -137,6 +156,82 @@ var DateUtil = {
         } else {
             return false;
         }
+    },
+
+    /**
+     * [getDateListByStartEnd 根据起始点，获取期间的所有的日期，包括起始日期]
+     * @param  {Date} startDate [开始日期]
+     * @param  {Date} endDate   [结束日期]
+     * @return {Array}          [日期对象数组]
+     */
+    getDateListByStartEnd: function(startDate, endDate) {
+        var list = [];
+        startDate = new Date(startDate);
+        endDate = new Date(endDate);
+
+        startDate.setHours(0);
+        startDate.setMinutes(0);
+        startDate.setSeconds(0);
+        startDate.setMilliseconds(0);
+        endDate.setHours(0);
+        endDate.setMinutes(0);
+        endDate.setSeconds(0);
+        endDate.setMilliseconds(0);
+
+        for (var i = +startDate, j = +endDate; i <= j; i = i + 24 * 3600000) {
+            list.push(new Date(i));
+        }
+        return list;
+    },
+
+    /**
+     * [isIntheDistance 判断某个日期是否在某个时间段内,包括起始日期]
+     * @param  {Date}  targetDate [目标日期]
+     * @param  {Date}  startDate  [起始日期]
+     * @param  {Date}  endDate    [结束日期]
+     * @return {Boolean}          [是否包含，true即表示包含在内，false则不包含]
+     */
+    isIntheDistance: function(targetDate,startDate,endDate){
+        targetDate = _.isDate(targetDate) ? targetDate : new Date(targetDate);
+        startDate = _.isDate(startDate) ? startDate : new Date(startDate);
+        endDate = _.isDate(endDate) ? endDate : new Date(endDate);
+
+        startDate.setHours(0);
+        startDate.setMinutes(0);
+        startDate.setSeconds(0);
+        startDate.setMilliseconds(0);
+        endDate.setHours(23);
+        endDate.setMinutes(59);
+        endDate.setSeconds(59);
+        endDate.setMilliseconds(59);
+
+        return (+startDate <= +targetDate) && (+targetDate <= +endDate);
+    },
+
+    /**
+     * [getDateDistance 获取2个日期之间的天数差，包括本身，比如10/01-10/31为31而不是30]
+     * @param  {Date} one [起始日期]
+     * @param  {Date} two [结束日期]
+     * @return {Number}   [天数]
+     */
+    getDateDistance: function(one, two) {
+        var start = new Date(one),
+            end = new Date(two);
+
+        if (start > end) {
+            var temp = start;
+            start = end;
+            end = temp;
+        }
+        start.setHours(0);
+        start.setMinutes(0);
+        start.setSeconds(0);
+
+        end.setHours(23);
+        end.setMinutes(59);
+        end.setSeconds(59);
+
+        return Math.abs((+end - +start + 1000) / (24 * 60 * 60 * 1000));
     },
 
     /**
@@ -301,26 +396,66 @@ var CalendarUtil = {
         // 默认显示的日期
         defaultDate: "",
 
-        toolList:[],
+        // 工具栏列表
+        /*
+         * [{
+         *     text:"关闭",
+         *     className:"closeCalendar",
+         *     action:function(instance,item){
+         *         instance.hide(function (instance) {
+         *             console.log(instance);
+         *         });
+         *         console.log(item);
+         *     }
+         * },{...}]
+         */
+        toolList: [],
 
-        showToolBar:false,
+        // 是否显示工具栏
+        showToolBar: false,
 
-        hasMask:false,
+        // 是否包含mask遮罩
+        hasMask: false,
+
+        // startEndSelect，日历是否能选择起始时间段，默认值false只能选择一个日期
+        startEndSelect: false,
+
+        // 选取起始日期时，填入输入框的日期格式
+        startEndDataFormat:"yyyy/MM/dd-yyyy/MM/dd",
+
+        // 用于记录用户选择的起始日期，最多为2个
+        startendList:[],
+
+        //startEndSelect 为true时的区间选择配置，默认无效
+        /*
+         * 示例配置
+         * startEndConfig:{
+         *     // 可以选择的最早日期
+         *     allowStartDate:"2015/10/01",
+         *     // 可以选择的最晚日期
+         *     allEndDate:"2017/10/01",
+         *     // 起始日期差不能大于90，包括起始日期在内
+         *     duration:100,
+         *     // 起始日期中的日期class
+         *     itemClass:"startenditem",
+         *     exceedDuration:function(){}
+         * },
+        */
 
         /**
          * [selectDateCallback 选中某个日期之后的回调]
          * @param  {NODE} el       [点击的日期的dom元素]
          * @param  {JSON} dateInfo [JSON对象]
-         * @return {[type]}          [description]
+         * @return {[type]}        [description]
          */
         selectDateCallback: function(el, dateInfo) {},
 
         /**
          * [selectMonth 切换月份之后的回调]
-         * @param  {JSON} monthAndYear [选择的月份及年]
-         * @param {futuCalendar} instance [日历实例]
-         * @param  {Number} offset      [{-1,0,1}-1表示点击了上一个月，1表示点击了下一个月,0表示当月]
-         * @return {[type]}             [description]
+         * @param  {JSON}         monthAndYear [选择的月份及年]
+         * @param  {futuCalendar} instance     [日历实例]
+         * @param  {Number}       offset       [{-1,0,1}-1表示点击了上一个月，1表示点击了下一个月,0表示当月]
+         * @return {[type]}                    [description]
          */
         selectMonth: function(instance, monthAndYear, offset) {},
 
@@ -336,15 +471,36 @@ var CalendarUtil = {
             selected: "selected",
             // 当前选中的日期
             normal: "date-item",
-
+            // 对于可选的日期进行着重突出
             prominent: "selectable",
-        }
+            // 表示是起始时间点的样式
+            startEndFlag: "startendflag",
+            // 表示是起始点中的日期
+            startEndItem: "startenditem"
+        },
+
+        // 默认的起始日期配置
+        defaultStartEndConfig: function() {
+            return {
+                duration: 10000000,
+                itemClass: this.classMap.startEndItem
+            };
+        },
+
+        // mask的样式
+        maskClassName: "futu-calendar-mask",
+
+        // 标志日历的class
+        calendarClassName: "futu-calendar",
+
+        // 标志显示起始日期的class
+        startendBar: "startend-bar"
     },
 
     /**
      * [initOption 初始化日历配置]
-     * @param  {[type]} option [description]
-     * @return {[type]}        [description]
+     * @param  {JSON} option   [配置对象]
+     * @return {JSON}          [整合后的配置对象]
      */
     initOption: function(option) {
         var _option = _.extend({}, this.defaultOption);
@@ -398,6 +554,23 @@ var CalendarUtil = {
             _option.valueTarget = BASE.$(option.valueTarget);
         }
 
+        // 是否允许选择时间段
+        _option.startEndSelect = _option.startEndSelect || Boolean(option.startEndSelect);
+        if (_option.startEndSelect) {
+            _option.startEndConfig = _.extend(_option.defaultStartEndConfig(), option.startEndConfig);
+
+            // 存在配置则根据起始日期获取可点击的日期列表
+            if (_option.startEndConfig && _option.startEndConfig.allowStartDate &&
+                _option.startEndConfig.allEndDate) {
+                // 覆盖用户设置的可点击区域
+                option.enableList = DateUtil.getDateListByStartEnd(
+                    _option.startEndConfig.allowStartDate, _option.startEndConfig.allEndDate);
+
+            } else {
+                _option.enableList = "all";
+            }
+        }
+
         // 如果设定了数组则生成一个{yyyy--MM-dd：yyyy--MM-dd}的map便于查找
         if (Array.isArray(option.enableList)) {
             var enableMap = {}, str;
@@ -411,13 +584,23 @@ var CalendarUtil = {
             _option.enableList = option.enableList;
         }
 
+        // 工具栏列表
         _option.toolList = option.toolList || [];
 
+        // 是否显示工具栏
         _option.showToolBar = Boolean(option.showToolBar);
 
+        // 是否理解显示日历
         _option.initshow = _option.initshow || Boolean(option.initshow);
 
+        // 是否具有遮罩层
         _option.hasMask = _option.hasMask || Boolean(option.hasMask);
+
+        // 单个日期格式
+        _.isString(option.dataFormat) && (_option.dataFormat = option.dataFormat);
+
+        // 起始日期格式
+        _.isString(option.startEndDataFormat) && (_option.startEndDataFormat = option.startEndDataFormat);
 
         // 预处理模板，主要是记性星期的名称初始化，以及可能存在的国际化处理
         _option.templateStr = CalendarUtil.preDealTemplate(_option.templateStr,_option);
@@ -426,12 +609,13 @@ var CalendarUtil = {
     },
 
     /**
-     * [preDealTemplate 对日历模板进行预处理]
-     * @return {[type]} [description]
+     * [preDealTemplate 对日历模板进行预处理，主要是对星期名称进行处理]
+     * @return {String} [description]
      */
     preDealTemplate: function(templateStr, option) {
 
         // 预处理阶段，通过{{}}的方法来替换对应变量
+        // 因为会对一个模板进行2次编译
         _.templateSettings = {
             evaluate: /\{\{([\s\S]+?)\}\}/g,
             interpolate: /\{\{=([\s\S]+?)\}\}/g,
@@ -477,7 +661,7 @@ var CalendarUtil = {
         };
 
         // 完善日期信息
-        instance.completeDayInfo(instance.calInfo, instance.currentSelectDate);
+        this.completeDayInfo(instance,instance.calInfo, instance.currentSelectDate);
 
         // 生成主体dom结构
         var html = _.template(option.templateStr)({
@@ -487,6 +671,7 @@ var CalendarUtil = {
         // 生成工具条
         instance.toolBarStr = this.createToolBar(instance);
 
+        // 使用Fragment提高效率
         var docfreg = document.createDocumentFragment();
         var temp = document.createElement("div");
         temp.innerHTML = html;
@@ -498,16 +683,21 @@ var CalendarUtil = {
         toolBar.style.display = option.showToolBar ? "block" : "none";
 
         // 移除已经存在dom元素
-        var exitsInstaceDom = option.wrapper.querySelector(".futu-calendar");
+        var exitsInstaceDom = option.wrapper.querySelector("."+option.calendarClassName);
         exitsInstaceDom && option.wrapper.removeChild(exitsInstaceDom);
 
-        if(option.hasMask) {
-            docfreg.querySelector(".futu-calendar").classList.add("maskable");
-
-            var m = option.wrapper.querySelector(".futu-calendar-mask");
-            !m && option.wrapper.appendChild(this.createMask());
-            instance.mask = option.wrapper.querySelector(".futu-calendar-mask");
+        // 加入遮罩
+        if (option.hasMask) {
+            docfreg.querySelector("."+option.calendarClassName).classList.add("maskable");
+            var m = option.wrapper.querySelector("."+option.maskClassName);
+            !m && option.wrapper.appendChild(this.createMask(option.maskClassName));
+            instance.mask = option.wrapper.querySelector("."+option.maskClassName);
         }
+
+        // 如果已经选择了起始日期，则也应该显示在日历中
+        var dateStr = instance.getDateInfo().dateStr;
+        option.startEndSelect && Boolean(dateStr) &&
+        BASE.setElementValue(docfreg.querySelector("."+option.startendBar), dateStr);
 
         // 加入新元素
         if (docfreg.children) {
@@ -516,10 +706,14 @@ var CalendarUtil = {
             option.wrapper.appendChild(docfreg.childNodes[0].childNodes[0]);
         }
 
-        docfreg = temp = toolBar = null;
+        docfreg = null;
+        temp = null;
+        toolBar = null;
 
         // 保存实例
-        instance.calendar = option.wrapper.querySelector(".futu-calendar");
+        instance.calendar = option.wrapper.querySelector("."+option.calendarClassName);
+
+        option.startEndSelect && instance.calendar.classList.add("multiple-select");
     },
 
     /**
@@ -544,49 +738,128 @@ var CalendarUtil = {
         });
     },
 
-    createMask: function  (instance) {
+    /**
+     * [createMask 创建遮罩层]
+     * @param  {String} maskClassName [遮罩class]
+     * @return {Element}              [遮罩元素]
+     */
+    createMask: function (maskClassName) {
         var mask = document.createElement("div");
-        mask.className = "futu-calendar-mask";
+        mask.className = maskClassName;
         return mask;
+    },
+
+    getTargetItem: function(instance,target){
+        var obj = {};
+        // 获取当前选择的日期元素
+        if (_.isDate(target)) {
+            obj.currentSelectDate = target;
+            obj.targetEle = instance.getItem(target);
+        } else if (_.isElement(target)) {
+            obj.targetEle = target;
+            var dataIndex = target.getAttribute("date-index").split("-")[1] - 0;
+            var dateInfo = instance.calInfo.list[dataIndex];
+            obj.currentSelectDate = new Date(dateInfo.year, dateInfo.month - 1, dateInfo.date);
+        } else {
+            return null;
+        }
+        return obj;
+    },
+
+    /**
+     * [addItemsClass 给定一个时间段，给时间段内的日期元素加上class]
+     * @param {futuCalendar} instance  [日期实例]
+     * @param {Date}         startDate [开始日期]
+     * @param {Date}         endDate   [结束日期]
+     * @param {String}       className [className]
+     */
+    addItemsClass: function(instance, startDate, endDate, className) {
+        var start = instance.getItemIndexByDate(startDate);
+        var end = instance.getItemIndexByDate(endDate);
+        end < start ? 42 : end;
+
+        var item;
+        for (var i = start; i <= end; i++) {
+            item = instance.getItem(i);
+            item && item.classList.add(className);
+        }
     },
 
     /**
      * [setCalendar 根据日期或者选中的日期元素重新设定当前日期变量]
      * @param {futuCalendar} instance [日历实例]
-     * @param {[type]} target   [element或者日期对象]
-     * @param {Function} callback [回调函数]
+     * @param {[type]}       target   [element或者日期对象]
+     * @param {Function}     callback [回调函数]
      */
     setCalendar: function(instance,target,callback){
+        var option = instance.option;
+        var classMap = option.classMap;
+        var wrapper = option.wrapper;
+        var startendList = option.startendList.slice(0);
+        var startEndConfig = option.startEndConfig;
 
-        var targetEle;
+        var targetInfo = this.getTargetItem(instance,target);
+        if (!targetInfo) {
+            return
+        };
 
-        if (_.isDate(target)) {
-            instance.currentSelectDate = target;
-            targetEle = instance.getItem(target);
-        } else if (_.isElement(target)) {
-            targetEle = target;
-            var dataIndex = target.getAttribute("date-index").split("-")[1] - 0;
-            var dateInfo = instance.calInfo.list[dataIndex];
-            instance.currentSelectDate = new Date(dateInfo.year, dateInfo.month - 1, dateInfo.date);
+        var targetEle = targetInfo.targetEle;
+        var currentSelectDate = targetInfo.currentSelectDate;
+
+        // 选择起始日期
+        if (option.startEndSelect) {
+            startendList.push(currentSelectDate);
+            var length = startendList.length;
+
+            // 比较2个日期之间距离差是否超过设置
+            if (length === 2) {
+                var days = DateUtil.getDateDistance(startendList[0],startendList[1]);
+
+                // 选择的2个日期时间差超过了设置
+                if (days > startEndConfig.duration) {
+
+                    // 起始日期超出时间差时的回调
+                    _.isFunction(startEndConfig.exceedDuration) &&
+                    startEndConfig.exceedDuration(days,currentSelectDate);
+                    return;
+                } else {
+                    startendList.sort(function(a, b) {
+                        return a - b > 0;
+                    });
+                    this.addItemsClass(instance,startendList[0],startendList[1],startEndConfig.itemClass);
+                }
+
+            // 当前已经选择了2个日期，则再次选择时需要清除之前的选择
+            } else if (length > 2) {
+                BASE.removeItemsClass(wrapper,classMap.startEndFlag);
+                BASE.removeItemsClass(wrapper,startEndConfig.itemClass);
+                startendList = [startendList[2]];
+            }
+
+            // 为当前日期加上标志class
+            targetEle && targetEle.classList.add(classMap.startEndFlag);
+            currentSelectDate = startendList[0];
+            option.startendList = startendList;
+
+        // 普通的选择单个日期
         } else {
-            return;
+            // 添加选中样式
+            BASE.removeItemsClass(wrapper,classMap.selected);
+            targetEle.classList.add(classMap.selected);
         }
 
-        // 添加选中样式
-        var selected = instance.option.wrapper.querySelector(".selected");
-        selected && selected.classList.remove(instance.option.classMap.selected);
-
-        targetEle.classList.add(instance.option.classMap.selected);
-
+        instance.currentSelectDate = currentSelectDate;
         // 如果存在与日历绑定的元素，则将值设置进入该元素
-        BASE.setElementValue(instance.option.valueTarget,instance.getDateInfo().dateStr);
+        var dateStr = instance.getDateInfo().dateStr;
+        BASE.setElementValue(option.valueTarget,dateStr );
+        option.startEndSelect && BASE.setElementValue(instance.calendar.querySelector("."+option.startendBar),dateStr);
 
         _.isFunction(callback) && callback();
     },
 
     /**
      * [bindEvents 进行事件监听]
-     * @param  {实例} instance [实例]
+     * @param  {futuCalendar} instance [实例]
      * @return {[type]}        [description]
      */
     bindEvents: function(instance) {
@@ -626,20 +899,18 @@ var CalendarUtil = {
                 var dateInfo = instance.calInfo.list[dataIndex];
 
                 if (dateInfo.isCliable) {
-                    // 点击日期之后，需要重新设置日期变量，主要是currentSelectDate字段及先关样式
-                    that.setCalendar(instance, target, function() {});
-                    instance.option.selectDateCallback(target, instance.getDateInfo());
+                    // 点击日期之后，需要重新设置日期变量，主要是currentSelectDate字段及相关样式
+                    that.setCalendar(instance, target, function() {
+                        instance.option.selectDateCallback(target, instance.getDateInfo());
+                    });
                 }
 
                 // 设置了自动隐藏，则选中日期之后隐藏
                 if (instance.option.autohide) {
                     instance.hide();
                 }
-
             }
-
             e.stopPropagation(true);
-
         });
 
         // 给绑定的输入框绑定事件
@@ -653,17 +924,96 @@ var CalendarUtil = {
             var cal = null;
 
             if (e.target.closest) {
-                cal = e.target.closest('.futu-calendar');
+                cal = e.target.closest('.'+option.calendarClassName);
             }
 
-            _.each(document.querySelectorAll(".futu-calendar"), function(item) {
+            _.each(document.querySelectorAll("."+option.calendarClassName), function(item) {
                 if (cal != item) {
                     item.style.display = "none";
-                    var mask = item.parentNode.querySelector(".futu-calendar-mask");
+                    var mask = item.parentNode.querySelector("."+option.maskClassName);
                     mask && (mask.style.display = "none");
                 }
             });
         });
+    },
+
+    /**
+     * [completeDayInfo 完善每一天的日期信息]
+     * @return {[type]} [description]
+     */
+    completeDayInfo: function(instance,calInfo,currentSelectDate) {
+        var dateList = calInfo.list,
+            today = new Date(),
+            option = instance.option,
+            classMap = option.classMap,
+            enableList = option.enableList,
+            enableMap = option.enableMap,
+            startEndConfig = option.startEndConfig,
+            startendList = option.startendList.sort(function(a,b){
+                return a - b > 0;
+            });
+
+        if (!Array.isArray(dateList) || dateList.length === 0) {
+            return dateList;
+        }
+
+        dateList.map(function(item) {
+            var d;
+            item.classList = [classMap.normal];
+
+            // 判断是否为可选择
+            // 全部可点击
+            if (enableList === "all") {
+                item.isCliable = true;
+            } else {
+                // 部分可点击，则将日期准换为yyyy-MM-dd形式在enableMap中查找
+                d = new Date(item.year, item.month - 1, item.date);
+                if (enableMap[DateUtil.getFormatDate(d, "yyyy-MM-dd")]) {
+                    item.classList = [classMap.normal, classMap.prominent];
+                    item.isCliable = true;
+                } else {
+                    item.isCliable = false;
+                }
+            }
+
+            // 当前日期为上一个或下一个月的日期
+            if (Boolean(item.isLastMonth) || Boolean(item.isNextMonth)) {
+                item.classList.push(classMap.othermonth);
+            } else {
+                d = new Date(item.year, item.month - 1, item.date);
+                item.classList.push(classMap.currentmonth);
+
+                // 今天
+                if (DateUtil.sameDate(d, today)) {
+                    item.classList.push(classMap.today);
+                }
+            }
+
+            // 单选日期
+            if (!option.startEndSelect) {
+                // 当前单选时选中的日期
+                if (DateUtil.sameDate(d, currentSelectDate)) {
+                    item.classList.push(classMap.selected);
+                }
+
+            // 选择起始日期
+            } else {
+                // 是否为选中的起始日期
+                startendList.forEach(function(date) {
+                    if (DateUtil.sameDate(date, d)) {
+                        item.classList.push(classMap.startEndFlag);
+                    }
+                });
+
+                if (DateUtil.isIntheDistance(d, startendList[0], startendList[1]) &&
+                    startEndConfig.itemClass) {
+                    item.classList.push(startEndConfig.itemClass);
+                }
+            }
+            return item;
+        });
+
+        return instance;
     }
 };
 
@@ -689,7 +1039,6 @@ function futuCalendar(option){
     this.option.selectMonth(this,this.calInfo.current,0);
 
     // 初始化时默认隐藏与否
-    this.option.initshow
     this.calendar.style.display = this.option.initshow ? "block":"none";
 
     // 是否显示默认的值
@@ -740,10 +1089,30 @@ _.extend(futuCalendar.prototype, {
      * @return {[type]}            [description]
      */
     getDateInfo: function() {
-        return {
-            date: this.currentSelectDate,
-            dateStr: DateUtil.getFormatDate(this.currentSelectDate, this.option.dataFormat)
-        };
+        var option = this.option;
+        // 如果设置了选取起始时间
+        if (option.startEndSelect) {
+            var list = option.startendList.slice(0);
+            list.sort(function(a, b) {
+                return a - b > 0
+            });
+
+            // 如果只选择了一个日期，则起始日期均为该日期
+            (list.length < 2) && (list[1] = list[0]);
+            var str1 = DateUtil.getFormatDate(list[0], option.startEndDataFormat);
+            var str2 = DateUtil.getFormatDate(list[1], str1);
+
+            return {
+                date: option.startendList.slice(0),
+                dateStr: str2
+            };
+
+        } else {
+            return {
+                date: this.currentSelectDate,
+                dateStr: DateUtil.getFormatDate(this.currentSelectDate, option.dataFormat)
+            };
+        }
     },
 
     /**
@@ -783,7 +1152,7 @@ _.extend(futuCalendar.prototype, {
 
     /**
      * [setDate 设置日历的日期,该日期被选中]
-     * @param {[type]}   date     [回调函数]
+     * @param {Date}     date     [回调函数]
      * @param {Function} callback [description]
      */
     setDate: function(date, callback) {
@@ -809,70 +1178,83 @@ _.extend(futuCalendar.prototype, {
     },
 
     /**
-     * [completeDayInfo 完善每一天的日期信息]
-     * @return {[type]} [description]
+     * [setSEPoints 在开启选取起始点功能时，设置指定起始点间的日期被选中,
+     * 注意，此时会限制于startencconfig中的设置]
+     * @param {Date}     startDate [开始时间]
+     * @param {Date}     endDate   [结束时间]
+     * @param {Function} callback  [回调函数]
      */
-    completeDayInfo: function(calInfo,currentSelectDate) {
-        var dateList = calInfo.list,
-            today = new Date(),
-            classMap = this.option.classMap,
-            enableList = this.option.enableList,
-            enableMap = this.option.enableMap;
+    setSEPoints: function(startDate,endDate,callback){
+        var option = this.option,
+            startEndConfig = this.option.startEndConfig,
+            wrapper = this.calendar;
 
-        if (!Array.isArray(dateList) || dateList.length === 0) {
-            return dateList;
+        startDate = _.isDate(startDate) ? startDate: new Date(startDate);
+        endDate = _.isDate(endDate) ? endDate: new Date(endDate);
+
+        if (!option.startEndSelect) {
+            return;
         }
 
-        dateList.map(function(item) {
-            item.classList = [classMap.normal];
+        // 指定的起始点不在允许的范围内
+        if (!DateUtil.isIntheDistance(startDate, startEndConfig.allowStartDate, startEndConfig.allEndDate) ||
+            !DateUtil.isIntheDistance(endDate, startEndConfig.allowStartDate, startEndConfig.allEndDate)) {
+            throw new Error("指定的起始点不在允许的范围内");
+            return;
+        }
 
-            // 判断是否为可选择
-            // 全部可点击
-            if (enableList === "all") {
-                item.isCliable = true;
-            } else {
-                // 部分可点击，则将日期准换为yyyy-MM-dd形式在enableMap中查找
-                var d = new Date(item.year, item.month - 1, item.date);
-                if (enableMap[DateUtil.getFormatDate(d, "yyyy-MM-dd")]) {
-                    item.classList = [classMap.normal, classMap.prominent];
-                    item.isCliable = true;
-                } else {
-                    item.isCliable = false;
-                }
-            }
+        // 指定的2个日期时间差超过了设置
+        if (DateUtil.getDateDistance(startDate, endDate) > startEndConfig.duration) {
+            throw new Error("指定的起始点时间差超出了允许的范围");
+            return;
+        }
 
-            // 当前日期为上一个或下一个月的日期
-            if (Boolean(item.isLastMonth) || Boolean(item.isNextMonth)) {
-                item.classList.push(classMap.othermonth);
-            } else {
-                var d = new Date(item.year, item.month - 1, item.date);
-                item.classList.push(classMap.currentmonth);
-
-                // 今天
-                if (DateUtil.sameDate(d, today)) {
-                    item.classList.push(classMap.today);
-                }
-
-                // 当前选中的日期
-                if (DateUtil.sameDate(d, currentSelectDate)) {
-                    item.classList.push(classMap.selected);
-                }
-
-            }
-            return item;
+        this.option.startendList = [startDate, endDate].sort(function(a,b){
+            return a - b > 0;
         });
+        this.currentSelectDate = option.startendList[0];
+
+        // 设置的起始日期在当前显示的日历中
+        if (this.calInfo.current.month - 1 == this.currentSelectDate.getMonth()) {
+            // 清楚以前的标志
+            BASE.removeItemsClass(wrapper, option.classMap.startEndFlag);
+            BASE.removeItemsClass(wrapper, option.startEndConfig.itemClass);
+            // 为指定的日期加上标志
+            CalendarUtil.addItemsClass(this, option.startendList[0], option.startendList[1], startEndConfig.itemClass);
+
+            // 标出起始点
+            var that = this, flagItem;
+            option.startendList.forEach(function(item) {
+                flagItem = that.getItem(item);
+                flagItem && flagItem.classList.add(option.classMap.startEndFlag);
+            });
+        } else {
+            CalendarUtil.generateHTML(this, this.currentSelectDate);
+        }
+
+        // 如果存在与日历绑定的元素，则将值设置进入该元素
+        var dateStr = this.getDateInfo().dateStr;
+        BASE.setElementValue(this.option.valueTarget, dateStr);
+        BASE.setElementValue(this.calendar.querySelector("."+option.startendBar),dateStr);
+
+        _.isFunction(callback) && callback(this);
+
         return this;
     },
 
     /**
      * [setCliableList 设置可以进行点击的日期]
+     * @param {Array}    list         [数组中的日期元素可点击]
+     * @param {Function} callback     [回调函数]
+     * @param {Boolean}  showRightNow [设置完之后是否理解显示]
      */
-    setCliableList: function(list,callback,showRightNow){
+    setCliableList: function(list, callback, showRightNow) {
 
         this.option.enableList = list;
 
         // 重新设定map值
-        var enableMap = {}, str;
+        var enableMap = {},
+            str;
         list.forEach(function(item) {
             str = DateUtil.getFormatDate(item, "yyyy-MM-dd");
             enableMap[str] = str;
@@ -880,18 +1262,18 @@ _.extend(futuCalendar.prototype, {
         this.option.enableMap = enableMap;
 
         /*重新渲染，这里设计的不太好*/
-        CalendarUtil.generateHTML(this,new Date(this.calInfo.current.year,this.calInfo.current.month - 1,1));
+        CalendarUtil.generateHTML(this, new Date(this.calInfo.current.year, this.calInfo.current.month - 1, 1));
 
-        if(Boolean(showRightNow)){
+        if (Boolean(showRightNow)) {
             this.show();
-        }else{
+        } else {
             this.hide();
         }
 
         // 如果存在回调，则将对应日期的dom元素返回
         if (_.isFunction(callback)) {
             var that = this;
-            list.forEach(function(item, i) {
+            list.forEach(function(item) {
                 callback(that.getItem(item));
             });
         }
@@ -901,8 +1283,8 @@ _.extend(futuCalendar.prototype, {
 
     /**
      * [getItemByDate 根据日期获取某天所在dom元素,日期必须在当月进行了显示]
-     * @param  {[type]} date [日期对象或者是能实例化为date的变量]
-     * @return {[type]}      [description]
+     * @param  {Date}   date [日期对象或者是能实例化为date的变量]
+     * @return {Number}      [索引]
      */
     getItemIndexByDate: function(date) {
 
@@ -945,10 +1327,10 @@ _.extend(futuCalendar.prototype, {
 
     /**
      * [getItem 根据日期或者索引选取元素]
-     * @param  {[type]} date [description]
-     * @return {[type]}      [description]
+     * @param  {Date}    date [description]
+     * @return {Element}      [description]
      */
-    getItem: function(date){
+    getItem: function (date) {
         var index = -1;
 
         //传入的是索引
@@ -957,10 +1339,10 @@ _.extend(futuCalendar.prototype, {
 
             //传入的是日期
         } else {
-            index = this.getItemIndexByDate(date)
+            index = this.getItemIndexByDate(date);
         }
 
-        return index  >-1 ? this.calendar.querySelector("[date-index=item-"+index+"]") : null;
+        return index > -1 ? this.calendar.querySelector("[date-index=item-" + index + "]") : null;
     }
 });
 

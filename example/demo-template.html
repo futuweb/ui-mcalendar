@@ -7,11 +7,13 @@
         <meta name="apple-mobile-web-app-status-bar-style" content="black">
         <meta name="renderer" content="webkit">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" >
-        <title>测试日历控件-无需手动加载css</title>
+        <title>测试日历控件-自定义模板</title>
+        <link rel="stylesheet" type="text/css" href="../src/ui-mcalendar.css"/>
         <style type="text/css" media="screen">
             .futu-calendar{
                 margin: 0 auto;
             }
+            fr.
         </style>
     </head>
     <body>
@@ -48,9 +50,9 @@
             </div>
         </div>
     </script>
-    <script type="text/javascript" src="../indexCss.js"></script>
+    <script type="text/javascript" src="../index.js?23452345234526"></script>
     <script type="text/javascript">
-
+        var month = ("00" + (new Date().getMonth()+1)).substr(-2);
         var input = document.querySelector("#calendarValue");
         var input2 = document.querySelector("#calendarValue2");
 
@@ -59,25 +61,10 @@
             initshow: false,
             autohide:true,
             hasMask:true,
-            showToolBar:true,
-            toolList:[{
-                text:"<%=calInfo.current.month%>月全部",
-                className:"selectCurrentMonth",
-                action:function(instance,item){
-                    alert("不知道要做啥");
-                }
-            },{
-                text:"关闭",
-                className:"closeCalendar",
-                action:function(instance,item){
-                    instance.hide(function (instance) {
-                        console.log(instance);
-                    });
-                    console.log(item);
-                }
-            }],
+            dataFormat:"yyyy/MM/dd",
             valueTarget:input,
             templateStr:document.querySelector("#templatedemo").innerHTML,
+            enableList:["2016-"+month+"-01","2016-"+month+"-02"],
             selectMonth:function(instance,info,offset){
                 console.log(info);
             },

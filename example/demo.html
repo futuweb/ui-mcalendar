@@ -52,7 +52,7 @@
     </script>
     <script type="text/javascript" src="../index.js?23452345234526"></script>
     <script type="text/javascript">
-
+        var month = ("00" + (new Date().getMonth()+1)).substr(-2);
         var input = document.querySelector("#calendarValue");
         var input2 = document.querySelector("#calendarValue2");
 
@@ -62,6 +62,7 @@
             autohide:true,
             hasMask:true,
             showToolBar:true,
+            dataFormat:"yyyy/MM/dd",
             toolList:[{
                 text:"<%=calInfo.current.month%>月全部",
                 className:"selectCurrentMonth",
@@ -79,8 +80,7 @@
                 }
             }],
             valueTarget:input,
-            templateStr:document.querySelector("#templatedemo").innerHTML,
-            enableList:["2016-09-01","2016-09-02"],
+            enableList:["2016-"+month+"-01","2016-"+month+"-02"],
             selectMonth:function(instance,info,offset){
                 console.log(info);
             },

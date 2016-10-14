@@ -90,6 +90,18 @@ a:hover {
 /* 工具条部分---------------------------------------------------------------- */
 
 /* 显示年月条---------------------------------------------------------------- */
+.futu-calendar .startend-bar{
+    display: none;
+}
+.multiple-select.futu-calendar .startend-bar{
+    background-color: #efeff4;
+    height: 34px;
+    line-height: 34px;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    display: block;
+}
 .futu-calendar .weekdate ul li,.futu-calendar .regular-date ul li{
     width: 1%;
     -moz-box-flex: 1;
@@ -112,22 +124,23 @@ a:hover {
 }
 .futu-calendar .time-bar span em{
     display: block;
-    width: 9px;
-    height: 16px;
-    background: url(data:image/gif;base64,R0lGODlhOAAgANU6AMXZ8wpezMjb9AtfzM3e9S110wxfzBBizSly0tPi9idx0h9s0Ctz08ba8zF41BdnzyZw0sTY8x1r0NDg9cfa88rc9CNu0Rhnz8PY8x5r0C921CBt0U+L2jJ51BNkzs7f9dHh9Rxq0BZmzxRkzlCM2xVlziRv0cLX8i931CFt0TR61Q5hzRZmzhFizRJjzsvd9NTj9sze9Hup5NXj9nyp5M/f9SVw0ihy0jB31Bloz////wAAAAAAAAAAAAAAAAAAACH/C1hNUCBEYXRhWE1QPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4gPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgNS4zLWMwMTEgNjYuMTQ1NjYxLCAyMDEyLzAyLzA2LTE0OjU2OjI3ICAgICAgICAiPiA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPiA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtbG5zOnhtcE1NPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvbW0vIiB4bWxuczpzdFJlZj0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL3NUeXBlL1Jlc291cmNlUmVmIyIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M2IChXaW5kb3dzKSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDo0NDQwMzBCRTdGRjAxMUU2OThERkVBNTE2MzdFNzkxNyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDo0NDQwMzBCRjdGRjAxMUU2OThERkVBNTE2MzdFNzkxNyI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOjQ0NDAzMEJDN0ZGMDExRTY5OERGRUE1MTYzN0U3OTE3IiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjQ0NDAzMEJEN0ZGMDExRTY5OERGRUE1MTYzN0U3OTE3Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+Af/+/fz7+vn49/b19PPy8fDv7u3s6+rp6Ofm5eTj4uHg397d3Nva2djX1tXU09LR0M/OzczLysnIx8bFxMPCwcC/vr28u7q5uLe2tbSzsrGwr66trKuqqainpqWko6KhoJ+enZybmpmYl5aVlJOSkZCPjo2Mi4qJiIeGhYSDgoGAf359fHt6eXh3dnV0c3JxcG9ubWxramloZ2ZlZGNiYWBfXl1cW1pZWFdWVVRTUlFQT05NTEtKSUhHRkVEQ0JBQD8+PTw7Ojk4NzY1NDMyMTAvLi0sKyopKCcmJSQjIiEgHx4dHBsaGRgXFhUUExIREA8ODQwLCgkIBwYFBAMCAQAAIfkEAQAAOgAsAAAAADgAIAAABv9AnXBIJCY8paJySRyNYMyoFMAYeKRYXWtQoGS/n4yBkfhGQQjDZmKOAjKBDKAdxYQCGy/dWM189lExIVwzgDoEBwEMc4ZMGAgBLjV7AgUDB2WNZysDGhVtAAsGBQSaWC8MBil6WAAmAQsCplkNEgEQrEyVBiaMs1gYFgaeUQIPAQURv2YnDAE5n0oCHQMPsstmDSwDKtFDAiIDHdfY2TgDF94AkCLk5dklil4ACgYI7u/Z9QgNNni++ehgWHALxYAbpQLuIaCgEwAHAQ4kVPgFUQAHyhANcACQIpOHlyYScGBAQkePRABIMOBgohCVARScREkvgMkl9Ozh8yggjUxqN5AuuKRI4EIABDOJCLjAZee7SuicKiFg6QEbhRMecBkqxdgtZfkiQAhgbc8ECAMsJG0EwMIACFf3RLAASyogAQQtgDUUahRXQFQNLFhrplLETI0SJCpgl45GEqY4RPybmAQNUzI4IMYSBAA7) no-repeat;
+    width: 20px;
+    height: 42px;
+    background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADgAAAAgCAMAAABw3UvaAAAANlBMVEUAAAAMX8zF2fPI2/QKXswpctPN3/UebNDS4vYtddQXZ88RYs4kb9LD2PMxeNTK3fRPjNt7qeT1AjZ1AAAAAXRSTlMAQObYZgAAARdJREFUOMuVVNuyxCAIExAVvLT7/z97Lp3tTruiNi99YAIhDborUlbXRc7JDYAM2SCCkM0LEdhonBhiMudFH9Eq1t8i2U3DUI6kbiF7RjdAZZ87jUnAMu5jOcj2vR9IcBNsDPc9sVxXt+0rdNNZ0C2glotaUi91Qvk4pCeTGii5RaBC297zoJFbBjY4ZiJ7Y5450zP955of8Q4KujLI5yC3xTXg8JQYGMRh83nANFLd6t8HmiHWtPUYFRo8WRMjtHAmkHHd0tPNR7+EGBgvbTQs+aI3caQgtDBPvlIdBDTNeEk7107qS50dYzfVqUyOGQuUZDQcPR8UDUmTByvIICYkPifrafRCo/jC3q/sk1NI+6tfeO03KT/6MQfEZvsDxAAAAABJRU5ErkJggg==");
+    background-repeat: no-repeat;
     background-size: 28px 16px;
     position: absolute;
-    top: 13px;
+    top: 0px;
 }
 
 /* 上一个月按钮 */
 .futu-calendar .time-bar span em.emLeft {
-    background-position: 0px 0px;
+    background-position: 5px 50%;
     left: -30px;
 }
 /* 下一个月按钮 */
 .futu-calendar .time-bar span em.emRight {
-    background-position: -19px 0px ;
+    background-position: -14px 50%;
     right: -30px;
 }
 /* 显示年月条---------------------------------------------------------------- */
@@ -185,4 +198,18 @@ a:hover {
     background-color: #1876e5;
     font-weight: 700;
 }
+
+/* 表示是起始点之间的日期 */
+.futu-calendar .regular-date li.startenditem span{
+    color: #FFF;
+    background-color: #03A9F4;
+}
+
+/* 表示是起始点 */
+.futu-calendar .regular-date li.startendflag span{
+    color: #FFF;
+    background-color: orange;
+}
+
+
 /* 日历部分------------------------------------------------------------------ */

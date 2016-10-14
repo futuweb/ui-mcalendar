@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8"/>
+        <meta name="format-detection" content="telephone=no"/>
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <meta name="renderer" content="webkit">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" >
+        <title>测试日历控件-自定义一部分样式</title>
+        <link rel="stylesheet" type="text/css" href="../src/ui-mcalendar.css"/>
+        <style type="text/css" media="screen">
+            .futu-calendar{
+                margin: 0 auto;
+            }
+            .futu-calendar .regular-date ul li span{
+                font-size: 100%;
+                background-color:white;
+            }
+            /* 可选日期 */
+            .futu-calendar .regular-date li.selectable span{
+                background-color: green;
+                color: white;
+            }
+            /* 被选中的日期 */
+            .futu-calendar .regular-date li.selected span{
+                background-color: pink;
+                color: white;
+            }
+            /* 其他月份 */
+            .futu-calendar .regular-date li.othermonth span{
+                background-color: gray;
+                color: white;
+            }
+            /*起始日期间的日期*/
+            .futu-calendar .regular-date li.startenditem span{
+                background-color: red;
+                color: white;
+            }
+            /* 起始日期 */
+            .futu-calendar .regular-date li.startendflag span{
+                background-color: orange;
+                color: white;
+            }
+
+        </style>
+    </head>
+    <body>
+        <input tpye="input" id="calendarValue" placeholder="请选择" />
+        <div class="wrapper"></div>
+    </body>
+    <script type="text/javascript" src="../index.js?23452345234526"></script>
+    <script type="text/javascript">
+        var d = new Date();
+        var input = document.querySelector("#calendarValue");
+        var input2 = document.querySelector("#calendarValue2");
+
+        var cal = new futuCalendar({
+            wrapper:".wrapper",
+            initshow: false,
+            autohide:false,
+            hasMask:true,
+            startEndSelect: true,
+            startEndDataFormat:"yyyy/MM/dd至yyyy/MM/dd",
+            startEndConfig:{
+                allowStartDate:new Date("2016-"+(d.getMonth()+1)+"-01"),
+                allEndDate:new Date("2016-"+(d.getMonth()+1)+"-28"),
+                duration:20,
+                itemClass:"startenditem",
+                exceedDuration:function(duration){
+                    alert("你选择的日期个数超标，共"+duration+"个日期");
+                }
+            },
+            showToolBar:true,
+            toolList:[{
+                text:"最近一周",
+                className:"nearweak",
+                action:function(instance,item){
+                    instance.setSEPoints(d,+d + 6*24*3600*1000,function(){});
+                }
+            },{
+                text:"关闭",
+                className:"closeCalendar",
+                action:function(instance,item){
+                    instance.hide();
+                }
+            }],
+            valueTarget:input,
+            selectDateCallback:function(el,dataInfo){
+                console.log(dataInfo);
+            }
+        });
+
+    </script>
+</html>

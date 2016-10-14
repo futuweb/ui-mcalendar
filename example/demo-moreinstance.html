@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8"/>
+        <meta name="format-detection" content="telephone=no"/>
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <meta name="renderer" content="webkit">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" >
+        <title>测试日历控件-多实例</title>
+        <link rel="stylesheet" type="text/css" href="../src/ui-mcalendar.css"/>
+        <style type="text/css" media="screen">
+            .futu-calendar{
+                margin: 0 auto;
+            }
+            #calendarValue2{
+                width: 200px;
+                height: 30px;
+                border: 1px solid gray;
+            }
+        </style>
+    </head>
+    <body>
+        <h4>选择单个日期</h4>
+        <input tpye="input" id="calendarValue" placeholder="请选择" />
+        <div id="calendarValue2" /></div>
+        <br/>
+        <h4>选择起始日期</h4>
+        <input tpye="input" id="calendarValue3" placeholder="请选择" />
+        <div class="wrapper1"></div>
+        <div class="wrapper2"></div>
+        <div class="wrapper3"></div>
+    </body>
+    <script type="text/javascript" src="../index.js?23452345234526"></script>
+    <script type="text/javascript">
+
+        var cal = new futuCalendar({
+            wrapper:".wrapper1",
+            initshow: false,
+            autohide:true,
+            hasMask:true,
+            showToolBar:true,
+            dataFormat:"yyyy/MM/dd",
+            toolList:[{
+                text:"关闭",
+                className:"closeCalendar",
+                action:function(instance,item){
+                    instance.hide(function (instance) {
+                        console.log(instance);
+                    });
+                    console.log(item);
+                }
+            }],
+            valueTarget:document.querySelector("#calendarValue"),
+            selectDateCallback:function(el,dataInfo){
+                console.log(dataInfo);
+            }
+        });
+
+        var cal2 = new futuCalendar({
+            wrapper:".wrapper2",
+            initshow: false,
+            autohide:true,
+            hasMask:true,
+            showToolBar:true,
+            dataFormat:"yyyy-MM-dd",
+            toolList:[{
+                text:"<%=calInfo.current.month%>月全部",
+                className:"selectCurrentMonth",
+                action:function(instance,item){
+                    alert("不知道要做啥");
+                }
+            }],
+            valueTarget:document.querySelector("#calendarValue2"),
+            selectMonth:function(instance,info,offset){
+                console.log(info);
+            },
+            selectDateCallback:function(el,dataInfo){
+                console.log(dataInfo);
+            }
+        });
+
+        var cal3 = new futuCalendar({
+            wrapper:".wrapper3",
+            initshow: false,
+            autohide:false,
+            hasMask:true,
+            startEndSelect: true,
+            startEndDataFormat:"yyyy/MM/dd至yyyy/MM/dd",
+            startEndConfig:{
+                allowStartDate:new Date("2016-09-01"),
+                allEndDate:new Date("2016-12-01"),
+                duration:60,
+                exceedDuration:function(duration){
+                    alert("日期选择超过了起始差"+duration);
+                }
+            },
+            dataFormat:"yyyy-MM-dd",
+            valueTarget:document.querySelector("#calendarValue3"),
+            selectMonth:function(instance,info,offset){
+                console.log(info);
+            },
+            selectDateCallback:function(el,dataInfo){
+                console.log(dataInfo);
+            }
+        });
+
+    </script>
+</html>
