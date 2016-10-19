@@ -1,24 +1,19 @@
 /* css reset----------------------------------------------------------------- */
-html {
+.futu-calendar{
+  margin: 0;
   font-family: sans-serif; /* 1 */
   -ms-text-size-adjust: 100%; /* 2 */
   -webkit-text-size-adjust: 100%; /* 2 */
 }
 
-/**
- * Remove the margin in all browsers (opinionated).
- */
-
-body {
-  margin: 0;
+.futu-calendar *{
+    box-sizing: content-box!important;;
 }
-/**
- * 1. Remove the gray background on active links in IE 10.
- * 2. Remove gaps in links underline in iOS 8+ and Safari 8+.
- */
 
-a {
-  background-color: transparent; /* 1 */
+/**
+ * 1. Remove gaps in links underline in iOS 8+ and Safari 8+.
+ */
+.futu-calendar a {
   -webkit-text-decoration-skip: objects; /* 2 */
 }
 
@@ -27,8 +22,8 @@ a {
  * in all browsers (opinionated).
  */
 
-a:active,
-a:hover {
+.futu-calendar a:active,
+.futu-calendar a:hover {
   outline-width: 0;
 }
 
