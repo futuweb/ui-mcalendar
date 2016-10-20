@@ -325,7 +325,15 @@ var cal = new futuCalendar({
 	   
        **说明：**切换月份时的回调函数，注意在初始化日历时也会被调用。回参包括日历实例instance，instance对象可调用其方法，详见下方方法说明。monthAndYear为json对象，包含年份及月份信息，结构为：`{month:月份，year：年份}`。offset为月份变动值，为1表示向往后推进一个月，-1表示向以前推进一个月，0表示初始化。
 	   
-       默认值:空。
+       **默认值：**空。
+
+    - `config.displayChange(showOrhide)`
+       
+       **类型：**Function
+     
+       **说明：** 用户关闭或者显示日历时始终会执行的函数，如果设置了show或者hide方法的回调，则此方法会在回调方法之后再执行；`showOrhide`表示刚刚执行的动作，`true`即表示执行了显示日历操作，`false`表示执行了关闭日历的操作。
+     
+       **默认值：**空。
 
 #### 2. `futuCalendar#show(callback)`
 
@@ -514,12 +522,17 @@ demo:
 ```
 
 > 更多样式情况请直接通过元素定位工具进行查找即可。
+
 ## 开发
 1. 源码位于src/index.js，开发完成后在ui-mcalendar目录下运营`gulp`命令，生成根目录下的index.js。
 2. 实例项目examples中，使用script标签的方式引入，可直接运行。
 3. 依赖`underscore.js`,开发过程中已进行打包，无需重复引入
 
 ## 版本记录
+
+### 1.1.2 2016-10-20
+- 增加displayChange配置方法，当用户显示或者关闭日历时始终会执行的方法
+
 ### 1.1.1 2016-10-19
 - 优化样式，防止被外部样式覆盖
 

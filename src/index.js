@@ -487,6 +487,13 @@ var CalendarUtil = {
             };
         },
 
+        /**
+         * [displayChange 当日历显示或者隐藏时执行的函数]
+         * @param  {Boolean} action [true表示日历做了显示操作，false即为关闭操作]
+         * @return {[type]}        [description]
+         */
+        displayChange: function(action) {},
+
         // mask的样式
         maskClassName: "futu-calendar-mask",
 
@@ -545,6 +552,11 @@ var CalendarUtil = {
         // 切换月份回调
         if (_.isFunction(option.selectMonth)) {
             _option.selectMonth = option.selectMonth;
+        }
+
+        // 日历显示或者隐藏时执行的函数
+        if(_.isFunction(option.displayChange)) {
+            _option.displayChange = option.displayChange;
         }
 
         // 是否和其他元素进行绑定
@@ -919,6 +931,12 @@ var CalendarUtil = {
             e.stopPropagation(true);
         });
 
+        // 给绑定的输入框绑定事件
+        BASE.addEventLister(instance.mask,"tap",function(e){
+            instance.hide();
+            e.stopPropagation(true);
+        });
+
         // 点击其他地方时，隐藏日历
         BASE.addEventLister(document, "tap", function(e) {
             var cal = null;
@@ -1067,6 +1085,8 @@ _.extend(futuCalendar.prototype, {
            this.mask.style.display = "block";
         }
         _.isFunction(callback) && callback(this);
+
+        this.option.displayChange(true,this);
         return this;
     },
 
@@ -1081,6 +1101,8 @@ _.extend(futuCalendar.prototype, {
            this.mask.style.display = "none";
         }
         _.isFunction(callback) && callback(this);
+
+        this.option.displayChange(false,this);
         return this;
     },
 

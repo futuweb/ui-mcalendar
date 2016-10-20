@@ -67,6 +67,9 @@
             valueTarget:input,
             selectDateCallback:function(el,dataInfo){
                 console.log(dataInfo);
+            },
+            displayChange: function(showOrhide){
+                alert("执行"+(showOrhide?"显示":"关闭")+"日历操作");
             }
         });
 
