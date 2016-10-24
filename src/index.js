@@ -451,6 +451,13 @@ var CalendarUtil = {
         selectDateCallback: function(el, dateInfo) {},
 
         /**
+         * [unSelectable 点击了某个不允许点击的日期的回调，此日期不在可点击区间内]
+         * @param  {NODE} el       [点击的日期的dom元素]
+         * @return {[type]} [description]
+         */
+        unSelectable:function(el){return true;},
+
+        /**
          * [selectMonth 切换月份之后的回调]
          * @param  {JSON}         monthAndYear [选择的月份及年]
          * @param  {futuCalendar} instance     [日历实例]
@@ -555,8 +562,13 @@ var CalendarUtil = {
         }
 
         // 日历显示或者隐藏时执行的函数
-        if(_.isFunction(option.displayChange)) {
+        if (_.isFunction(option.displayChange)) {
             _option.displayChange = option.displayChange;
+        }
+
+        // 点击了不可点击的元素时的回调
+        if (_.isFunction(option.unSelectable)) {
+            _option.unSelectable = option.unSelectable;
         }
 
         // 是否和其他元素进行绑定
@@ -909,16 +921,22 @@ var CalendarUtil = {
 
                 var dataIndex = target.getAttribute("date-index").split("-")[1] - 0;
                 var dateInfo = instance.calInfo.list[dataIndex];
+                var result = true;
 
                 if (dateInfo.isCliable) {
                     // 点击日期之后，需要重新设置日期变量，主要是currentSelectDate字段及相关样式
                     that.setCalendar(instance, target, function() {
                         instance.option.selectDateCallback(target, instance.getDateInfo());
                     });
+                } else {
+                    // 点击了不可点击的元素之后的回调
+                    // 会根据返回值判断之后的行为
+                    // 回调返回false则日历保持原状，返回true则根据option.autohide进行显示和隐藏
+                    result = Boolean(instance.option.unSelectable(target));
                 }
 
                 // 设置了自动隐藏，则选中日期之后隐藏
-                if (instance.option.autohide) {
+                if (result && instance.option.autohide) {
                     instance.hide();
                 }
             }

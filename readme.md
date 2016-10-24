@@ -149,7 +149,7 @@ var cal = new futuCalendar({
 - `config`: 日历配置相关参数，json对象，具体字段见参数说明。
 	- `config.templateStr`
 
-	   **类型：**`String`。
+	   **类型：** `String`。
 
 	   **默认值:** 组件默认的模板字符串，模板文件存在于`templates/mcalendar.html`中；用户可以自定义组件模板类型，用于增减页面元素。
 
@@ -157,82 +157,82 @@ var cal = new futuCalendar({
 	   
        **类型：** `<Element|String>`，页面元素或者是元素选择器。
        
-       **说明：**组件容器，用于存放日历实例。
+       **说明：** 组件容器，用于存放日历实例。
        
-       **默认值：**空，需用户指定，可选。
+       **默认值：** 空，需用户指定，可选。
 
     - `config.valueTarget`
 	   
-       **类型：**`<Element|String>`，页面元素或者是元素选择器。
+       **类型：** `<Element|String>`，页面元素或者是元素选择器。
        
-       **说明：**选择某个日期时，会将日期赋值给该元素，如果该元素为input，textarea，则赋值给value属性。否则赋值给元素的innerHTML属性。
+       **说明：** 选择某个日期时，会将日期赋值给该元素，如果该元素为input，textarea，则赋值给value属性。否则赋值给元素的innerHTML属性。
 	   
        **默认值：** 空，可选。
 
 	- `config.dataFormat`
 	   
-       **类型：**String
+       **类型：** String
        
-       **说明：**填充valueTarget元素的日期格式。各个占位符意思如下： `yyyy`：年份，四位, `MM`:月份，两位, `dd`:日期，2位
+       **说明：** 填充valueTarget元素的日期格式。各个占位符意思如下： `yyyy`：年份，四位, `MM`:月份，两位, `dd`:日期，2位
        
-       **默认值：**`yyyy-MM-dd`, 例如：2016-10-01。
+       **默认值：** `yyyy-MM-dd`, 例如：2016-10-01。
 
     - `config.weekdates`
        
-       **类型：**Array,
+       **类型：** Array,
        
-       **说明：**由于显示星期的名称，插件默认每周首日从周日开始。
+       **说明：** 由于显示星期的名称，插件默认每周首日从周日开始。
 	   
-       **默认值：**["日", "一", "二", "三", "四", "五", "六"]。
+       **默认值：** ["日", "一", "二", "三", "四", "五", "六"]。
 	   > 此处功能待扩展
 	  
     - `config.autohide`
        
-       **类型：**Boolean
+       **类型：** Boolean
        
-       **说明：**选中某个日期之后，是否自动关闭（不显示）日历。
+       **说明：** 选中某个日期之后，是否自动关闭（不显示）日历。
 	   
-       **默认值：**true,默认会自动关闭。
+       **默认值：** true,默认会自动关闭。
     
     - `config.enableList`
 	   
-       **类型：**<Array|"all">
+       **类型：** <Array|"all">
 	   
-       **说明：**指明是否所有日期是否可选。当前值为字符创`all`时，表示所有 日期均可选，如果只为数组，则表示只有数组中的日期可被选中，此时，能被选中的日期将会获得 `selectable`类用于标识突出。   
+       **说明：** 指明是否所有日期是否可选。当前值为字符创`all`时，表示所有 日期均可选，如果只为数组，则表示只有数组中的日期可被选中，此时，能被选中的日期将会获得 `selectable`类用于标识突出。   
        
-       **默认值：**`all`，默认所有日期均可选择。
+       **默认值：** `all`，默认所有日期均可选择。
 
     - `config.defaultDate`
        
-       **类型：**Date
+       **类型：** Date
        
-       **说明：**初次显示日历时，被选中的日期，如果不设置则关联的`valueTarget`不设置值
+       **说明：** 初次显示日历时，被选中的日期，如果不设置则关联的`valueTarget`不设置值
 	   
-       **默认值：**空。
+       **默认值：** 空。
 
 	- `config.initshow`
 	   
-       **类型：**Boolean
+       **类型：** Boolean
        
-       **说明：**初始化时，是否立即显示日历。
+       **说明：** 初始化时，是否立即显示日历。
 	   
-       **默认值：**false，默认不显示日历。
+       **默认值：** false，默认不显示日历。
 
 	- `config.initshow`
 	   
-       **类型：**Boolean
+       **类型：** Boolean
        
-       **说明：**是否显示mask。
+       **说明：** 是否显示mask。
 	   
-       **默认值：**false，默认不显示遮罩。
+       **默认值：** false，默认不显示遮罩。
 
     - `config.toolList`
        
-       **类型：**Array
+       **类型：** Array
 	   
-       **说明：**用于生成顶部工具栏的数组列表
+       **说明：** 用于生成顶部工具栏的数组列表
 	   
-       **结构说明：**每个节点最终会生成一个a节点，插入`tool-bar`中.
+       **结构说明：** 每个节点最终会生成一个a节点，插入`tool-bar`中.
        - `toolList[i].text`:节点（工具按钮）名
        - `toolList[i].className`:用户设定的类名，可用于自定义样式
 	   - `toolList[i].action`:点击工具按钮时的回调函数，回参包括日历实例instance，及当前点击元素item；instance对象可调用其方法，详见下方方法说明。
@@ -249,27 +249,27 @@ var cal = new futuCalendar({
         }]
        ```
 
-	   **默认值：**空
+	   **默认值：** 空
 
     - `config.showToolBar`
        
-       **类型：**Boolean
+       **类型：** Boolean
 	   
-       **说明：**是否显示工具栏，为true时显示，为false则不显示。
+       **说明：** 是否显示工具栏，为true时显示，为false则不显示。
 	   
-       **默认值：**false,不显示工具栏
+       **默认值：** false,不显示工具栏
 
     - `config.startEndSelect`
        
-       **类型：**Boolean
+       **类型：** Boolean
      
-       **说明：**日历是否能选择起始时间段（2个时间值），为true及可选择起始时间点，为false只能选择一个日期。
+       **说明：** 日历是否能选择起始时间段（2个时间值），为true及可选择起始时间点，为false只能选择一个日期。
      
-       **默认值：**false, 只能选择一个时间点
+       **默认值：** false, 只能选择一个时间点
 
     - `config.startEndDataFormat`
        
-       **类型：**String
+       **类型：** String
      
        **说明：**日历选择的起始时间段（2个时间值），最终会展示的时间格式，主要涉及`onfig.valueTarget`元素内容及`getDateInfo().dateStr`的内容格式,只有在`config.startEndSelect`为true时有意义。
        
@@ -277,9 +277,9 @@ var cal = new futuCalendar({
 	
     - `config.startEndConfig`
        
-       **类型：**JSON
+       **类型：** JSON
 	   
-       **说明：**日历允许选择的起始时间段时的配置JSON
+       **说明：** 日历允许选择的起始时间段时的配置JSON
 	   
 	       - `startEndConfig.allowStartDate`: 选择时间段时，能选择的最小日期, 类型为Date
 	       - `startEndConfig.allEndDate`: 选择时间段时，能选择的最大日期， 类型为Date
@@ -313,35 +313,45 @@ var cal = new futuCalendar({
 
     - `config.selectDateCallback(el, dateInfo)`
        
-       **类型：**Function
+       **类型：** Function
 	   
-       **说明：**选中某个日期时的回调，注意：只有当前日期可被选中时才会执行。回参包括被选中的DOM元素，dateInfo为json对象，结构如下`{date:日期对象，dateStr：符合config.dataFormat格式的日期字符串}`。
+       **说明：** 选中某个日期时的回调，注意：只有当前日期可被选中时才会执行。回参包括被选中的DOM元素，dateInfo为json对象，结构如下`{date:日期对象，dateStr：符合config.dataFormat格式的日期字符串}`。
 	   
-       默认值:空。
+       **默认值:** 空。
 
     - `config.selectMonth(instance, monthAndYear, offset)`
        
-       **类型：**Function
+       **类型：** Function
 	   
-       **说明：**切换月份时的回调函数，注意在初始化日历时也会被调用。回参包括日历实例instance，instance对象可调用其方法，详见下方方法说明。monthAndYear为json对象，包含年份及月份信息，结构为：`{month:月份，year：年份}`。offset为月份变动值，为1表示向往后推进一个月，-1表示向以前推进一个月，0表示初始化。
+       **说明：** 切换月份时的回调函数，注意在初始化日历时也会被调用。回参包括日历实例instance，instance对象可调用其方法，详见下方方法说明。monthAndYear为json对象，包含年份及月份信息，结构为：`{month:月份，year：年份}`。offset为月份变动值，为1表示向往后推进一个月，-1表示向以前推进一个月，0表示初始化。
 	   
-       **默认值：**空。
+       **默认值：** 空。
 
     - `config.displayChange(showOrhide)`
        
-       **类型：**Function
+       **类型：** Function
      
        **说明：** 用户关闭或者显示日历时始终会执行的函数，如果设置了show或者hide方法的回调，则此方法会在回调方法之后再执行；`showOrhide`表示刚刚执行的动作，`true`即表示执行了显示日历操作，`false`表示执行了关闭日历的操作。
      
-       **默认值：**空。
+       **默认值：** 空。
+
+    - `config.unSelectable(target)`
+       
+       **类型：** Function
+     
+       **说明：** 点击了不可选的日期时的回调函数，主要用于指定了点击区域或者某些日期情况下的提示， `target`为用户点击的日期。
+
+       **return：** 此函数需要设置返回值，当unSelectable返回true时，点击日期后日历会根据`config.autohide`来进行显示或者隐藏；返回为false时，点击日期后日历保持原状，即不会隐藏。如不设置返回值，默认返回false。
+     
+       **默认值：** 空。
 
 #### 2. `futuCalendar#show(callback)`
 
-**说明：**全局方法，显示日历,实例化日历时默认不显示，可调用此方法来显示，
+**说明：** 全局方法，显示日历,实例化日历时默认不显示，可调用此方法来显示，
 
-**参数：**显示日历时的回调函数，回调函数的参数为日历实例，
+**参数：** 显示日历时的回调函数，回调函数的参数为日历实例，
 
-**return：**`this`，当前日历实例，
+**return：** `this`，当前日历实例，
 
 **demo:**
 ```
@@ -351,11 +361,11 @@ cal.show(function(instance){
 ```
 #### 3. `futuCalendar#hide(callback)`
 
-**说明：**全局方法，隐藏日历，
+**说明：** 全局方法，隐藏日历，
 
-**参数：**显示日历时的回调函数，回调函数的参数为日历实例，
+**参数：** 显示日历时的回调函数，回调函数的参数为日历实例，
 
-**return：**`this`，当前日历实例，
+**return：** `this`，当前日历实例，
 
 **demo:**
 ```
@@ -365,9 +375,9 @@ cal.hide(function(instance){
 ```
 #### 4. `futuCalendar#getDateInfo()`
 
-**说明：**全局方法，获取当前选择的日期
+**说明：** 全局方法，获取当前选择的日期
 
-**return：**JSON对象，日期信息，分两种情况
+**return：** JSON对象，日期信息，分两种情况
 - 当`config.startEndSelect`为false（默认为false）时，返回的值为选中的单个日期信息。格式为`{date:Date对象，dateStr：符合option.dataFormat格式的时间字符串}`；
 如：
 
@@ -379,11 +389,11 @@ cal.hide(function(instance){
 
 #### 5. `futuCalendar#goLastMonth(callback)`
 
-**说明：**切换到上一个月的日历信息
+**说明：** 切换到上一个月的日历信息
 
-**参数：**切换后的回调函数，回调函数的参数为日历实例，
+**参数：** 切换后的回调函数，回调函数的参数为日历实例，
 
-**return：**`this`，当前日历实例，
+**return：** `this`，当前日历实例，
 
 **demo:**
 ```
@@ -394,9 +404,9 @@ cal.goLastMonth(function(instance){
 
 #### 6. `futuCalendar#goNextMonth(callback)`
 
-**说明：**切换到下一个月的日历信息
+**说明：** 切换到下一个月的日历信息
 
-**参数：**切换后的回调函数，回调函数的参数为日历实例，
+**参数：** 切换后的回调函数，回调函数的参数为日历实例，
 
 **return：**`this`，当前日历实例，
 
@@ -409,11 +419,11 @@ cal.goLastMonth(function(instance){
 
 #### 7. `futuCalendar#setDate(date, callback)`
 
-**说明：**设置日历的日期，即设置那一天被选中
+**说明：** 设置日历的日期，即设置那一天被选中
 
-**参数：**`date`为Date对象或者可以被实例化为Date对象的变量，`callback`为切换后的回调函数，回调函数的参数为日历实例，
+**参数：** `date`为Date对象或者可以被实例化为Date对象的变量，`callback`为切换后的回调函数，回调函数的参数为日历实例，
 
-**return：**`this`，当前日历实例，
+**return：** `this`，当前日历实例，
 
 **demo：**
 ```
@@ -424,9 +434,9 @@ cal.setDate(date，function(instance){
 
 #### 8. `futuCalendar#setCliableList(list,callback,showRightNow)`
 
-**说明：**重新设置可以点击的日期，会覆盖enableList中的配置
+**说明：** 重新设置可以点击的日期，会覆盖enableList中的配置
 
-**参数：**`list`为日期数组，如`["2016-12-01","2016-12-02"]`或者`[new Date("2016-12-01")]`,数组中元素需要可以实例化为Date对象;callback为回调函数，函数参数为数组中日期所对应的日期DOM元素；showRightNow表示设置完成之后是否理解显示日历，默认不显示；showRightNow为true时则设置完成之后立即显示日历。
+**参数：** `list`为日期数组，如`["2016-12-01","2016-12-02"]`或者`[new Date("2016-12-01")]`,数组中元素需要可以实例化为Date对象;callback为回调函数，函数参数为数组中日期所对应的日期DOM元素；showRightNow表示设置完成之后是否理解显示日历，默认不显示；showRightNow为true时则设置完成之后立即显示日历。
 
 **demo：**
 ```
@@ -438,18 +448,18 @@ cal.setCliableList(["2016-09-22","2016-09-23"],function(item){
 
 #### 9. `futuCalendar#getItemIndexByDate(date)`
 
-**说明：**根据日期获取指定元素的索引
+**说明：** 根据日期获取指定元素的索引
 
-**参数：**`date`为Date对象或者可以被实例化为Date对象的变量。
+**参数：** `date`为Date对象或者可以被实例化为Date对象的变量。
 
-**return：**Number,返回该日期在42个日期元素中的索引。
+**return：** Number,返回该日期在42个日期元素中的索引。
 
 #### 10. `futuCalendar#getItem(date)`
 
-**说明：**根据日期或者索引获取指定元素
+**说明：** 根据日期或者索引获取指定元素
 
-**参数：**当date为日期时，如果当前日期未在当前日历上显示，则返回空；当date为数值时，则返回42个日期元素中的指定dom元素。
-**return：**Element,对应的日期DOM元素
+**参数：** 当date为日期时，如果当前日期未在当前日历上显示，则返回空；当date为数值时，则返回42个日期元素中的指定dom元素。
+**return：** Element,对应的日期DOM元素
 
 #### 11. `futuCalendar#setSEPoints(startDate,endDate,callback)`
 
@@ -457,7 +467,7 @@ cal.setCliableList(["2016-09-22","2016-09-23"],function(item){
 
 **参数：** `startDate`为时间段的起始日期，`endDate`为结束日期，`startDate`和`endDate`为Date实例或者可以实例化为Date对象的变量（时间戳或者日期字符串），`callback`为设置之后的回调函数，回调函数参数为当前日历实例
 
-**return**：this，当前日历实例，
+**return：** this，当前日历实例，
 
 **demo：**
 ```
@@ -529,6 +539,10 @@ demo:
 3. 依赖`underscore.js`,开发过程中已进行打包，无需重复引入
 
 ## 版本记录
+
+### 1.1.3 2016-10-24
+- 修正readme样式
+- 增加点击了不可选日期时的回调
 
 ### 1.1.2 2016-10-20
 - 增加displayChange配置方法，当用户显示或者关闭日历时始终会执行的方法

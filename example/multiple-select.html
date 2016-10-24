@@ -37,7 +37,7 @@
         var cal = new futuCalendar({
             wrapper:".wrapper",
             initshow: false,
-            autohide:false,
+            autohide: false,
             hasMask:true,
             startEndSelect: true,
             startEndDataFormat:"yyyy/MM/dd至yyyy/MM/dd",
@@ -70,6 +70,10 @@
             },
             displayChange: function(showOrhide){
                 alert("执行"+(showOrhide?"显示":"关闭")+"日历操作");
+            },
+            unSelectable:function(item){
+                alert("该日期无效，不能被点击");
+                return false;
             }
         });
 

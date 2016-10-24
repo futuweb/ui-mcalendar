@@ -59,17 +59,22 @@
         var cal = new futuCalendar({
             wrapper:".wrapper",
             initshow: false,
-            autohide:true,
-            hasMask:true,
-            dataFormat:"yyyy/MM/dd",
-            valueTarget:input,
-            templateStr:document.querySelector("#templatedemo").innerHTML,
-            enableList:["2016-"+month+"-01","2016-"+month+"-02"],
-            selectMonth:function(instance,info,offset){
+            autohide: true,
+            hasMask: true,
+            dataFormat: "yyyy/MM/dd",
+            valueTarget: input,
+            templateStr: document.querySelector("#templatedemo").innerHTML,
+            enableList: ["2016-"+month+"-01","2016-"+month+"-02"],
+            selectMonth: function(instance,info,offset){
                 console.log(info);
             },
-            selectDateCallback:function(el,dataInfo){
+            selectDateCallback: function(el,dataInfo){
                 console.log(dataInfo);
+            },
+            unSelectable: function(item){
+                alert("该日期无效，不能被点击");
+                console.log(item);
+                return false;
             }
         });
 
