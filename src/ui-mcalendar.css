@@ -6,6 +6,9 @@
   -webkit-text-size-adjust: 100%; /* 2 */
 }
 
+html{
+    -webkit-tap-highlight-color: transparent;
+}
 .futu-calendar *{
     box-sizing: content-box!important;;
 }
@@ -14,17 +17,20 @@
  * 1. Remove gaps in links underline in iOS 8+ and Safari 8+.
  */
 .futu-calendar a {
-  -webkit-text-decoration-skip: objects; /* 2 */
+   -webkit-text-decoration-skip: objects; /* 2 */
 }
 
 /**
  * Remove the outline on focused links when they are also active or hovered
  * in all browsers (opinionated).
  */
-
-.futu-calendar a:active,
-.futu-calendar a:hover {
-  outline-width: 0;
+.futu-calendar a,
+.futu-calendar a:link,
+.futu-calendar a:visited,
+.futu-calendar a:hover,
+.futu-calendar a:active {
+    outline-width: 0;
+    text-decoration:none;
 }
 
 .futu-calendar ul,.futu-calendar div,.futu-calendar ul li{
@@ -156,6 +162,7 @@
 .futu-calendar .regular-date ul li{
     height: 30px;
     padding: 6px 0;
+    border: none;
 }
 
 .futu-calendar .regular-date ul li span{
@@ -168,6 +175,7 @@
     -moz-border-radius: 30px;
     -webkit-border-radius: 30px;
     border-radius: 30px;
+    border: none;
 }
 
 /* 当前显示的日历中其他月份的日期 */

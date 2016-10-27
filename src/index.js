@@ -149,6 +149,8 @@ var DateUtil = {
      * @return {[type]}    [description]
      */
     sameDate: function(d1, d2) {
+        d1 = new Date(d1);
+        d2 = new Date(d2);
         if (_.isDate(d1) && _.isDate(d2)) {
             return d1.getFullYear() === d2.getFullYear() &&
                 d1.getMonth() === d2.getMonth() &&
@@ -192,9 +194,17 @@ var DateUtil = {
      * @return {Boolean}          [是否包含，true即表示包含在内，false则不包含]
      */
     isIntheDistance: function(targetDate,startDate,endDate){
+
+        startDate = startDate || "1970-01-01";
+        endDate = endDate || "9999-12-30";
+
         targetDate = _.isDate(targetDate) ? targetDate : new Date(targetDate);
         startDate = _.isDate(startDate) ? startDate : new Date(startDate);
         endDate = _.isDate(endDate) ? endDate : new Date(endDate);
+
+        if (!_.isDate(targetDate) || !_.isDate(startDate) || !_.isDate(endDate)) {
+            return false;
+        }
 
         startDate.setHours(0);
         startDate.setMinutes(0);
@@ -436,6 +446,7 @@ var CalendarUtil = {
          *     allEndDate:"2017/10/01",
          *     // 起始日期差不能大于90，包括起始日期在内
          *     duration:100,
+         *     defaultStartEnd: [new Date(),new Date()],
          *     // 起始日期中的日期class
          *     itemClass:"startenditem",
          *     exceedDuration:function(){}
@@ -593,6 +604,10 @@ var CalendarUtil = {
             } else {
                 _option.enableList = "all";
             }
+
+            // 存在默认选中的时间段
+            _option.startendList = this.fetchStartEndDate(_option.startEndConfig);
+
         }
 
         // 如果设定了数组则生成一个{yyyy--MM-dd：yyyy--MM-dd}的map便于查找
@@ -630,6 +645,31 @@ var CalendarUtil = {
         _option.templateStr = CalendarUtil.preDealTemplate(_option.templateStr,_option);
 
         return _option;
+    },
+
+    /**
+     * [fetchStartEndDate 根据配置，分析出正确的默认起始时间]
+     * @param  {[type]} startEndConfig [description]
+     * @return {[type]}                [description]
+     */
+    fetchStartEndDate: function(startEndConfig) {
+        var arr = [];
+        var as = startEndConfig.allowStartDate,ae = startEndConfig.allEndDate;
+
+        if (startEndConfig && _.isArray(startEndConfig.defaultStartEnd) &&
+            startEndConfig.defaultStartEnd.length == 2) {
+
+            var defaultStart = startEndConfig.defaultStartEnd[0],
+                defaultEnd = startEndConfig.defaultStartEnd[1];
+
+            if (DateUtil.isIntheDistance(defaultStart, as, ae) &&
+                DateUtil.isIntheDistance(defaultEnd, as, ae) &&
+                DateUtil.getDateDistance(defaultStart, defaultEnd) <= startEndConfig.duration) {
+                arr = [defaultStart, defaultEnd];
+            }
+        }
+
+        return arr;
     },
 
     /**
@@ -824,8 +864,8 @@ var CalendarUtil = {
 
         var targetInfo = this.getTargetItem(instance,target);
         if (!targetInfo) {
-            return
-        };
+            return;
+        }
 
         var targetEle = targetInfo.targetEle;
         var currentSelectDate = targetInfo.currentSelectDate;
@@ -848,8 +888,9 @@ var CalendarUtil = {
                     return;
                 } else {
                     startendList.sort(function(a, b) {
-                        return a - b > 0;
+                        return +new Date(a) - +new Date(b);
                     });
+
                     this.addItemsClass(instance,startendList[0],startendList[1],startEndConfig.itemClass);
                 }
 
@@ -949,7 +990,7 @@ var CalendarUtil = {
             e.stopPropagation(true);
         });
 
-        // 给绑定的输入框绑定事件
+        // 给绑定的MASK绑定事件
         BASE.addEventLister(instance.mask,"tap",function(e){
             instance.hide();
             e.stopPropagation(true);
@@ -986,7 +1027,7 @@ var CalendarUtil = {
             enableMap = option.enableMap,
             startEndConfig = option.startEndConfig,
             startendList = option.startendList.sort(function(a,b){
-                return a - b > 0;
+                return +new Date(a) - +new Date(b) ;
             });
 
         if (!Array.isArray(dateList) || dateList.length === 0) {
@@ -1028,7 +1069,7 @@ var CalendarUtil = {
             // 单选日期
             if (!option.startEndSelect) {
                 // 当前单选时选中的日期
-                if (DateUtil.sameDate(d, currentSelectDate)) {
+                if (DateUtil.sameDate(d, currentSelectDate) && item.isCliable) {
                     item.classList.push(classMap.selected);
                 }
 
@@ -1041,7 +1082,8 @@ var CalendarUtil = {
                     }
                 });
 
-                if (DateUtil.isIntheDistance(d, startendList[0], startendList[1]) &&
+                if (startendList.length == 2 &&
+                    DateUtil.isIntheDistance(d, startendList[0], startendList[1]) &&
                     startEndConfig.itemClass) {
                     item.classList.push(startEndConfig.itemClass);
                 }
@@ -1134,7 +1176,7 @@ _.extend(futuCalendar.prototype, {
         if (option.startEndSelect) {
             var list = option.startendList.slice(0);
             list.sort(function(a, b) {
-                return a - b > 0
+                return +new Date(a) - +new Date(b);
             });
 
             // 如果只选择了一个日期，则起始日期均为该日期
@@ -1239,18 +1281,25 @@ _.extend(futuCalendar.prototype, {
         // 指定的起始点不在允许的范围内
         if (!DateUtil.isIntheDistance(startDate, startEndConfig.allowStartDate, startEndConfig.allEndDate) ||
             !DateUtil.isIntheDistance(endDate, startEndConfig.allowStartDate, startEndConfig.allEndDate)) {
-            throw new Error("指定的起始点不在允许的范围内");
-            return;
+            throw new Error("指定的起始点不在允许的范围内"+JSON.stringify({
+                "startDate":startDate,
+                "endDate":endDate,
+                "allowStartDate":startEndConfig.allowStartDate,
+                "allEndDate":startEndConfig.allEndDate
+            }));
         }
 
         // 指定的2个日期时间差超过了设置
         if (DateUtil.getDateDistance(startDate, endDate) > startEndConfig.duration) {
-            throw new Error("指定的起始点时间差超出了允许的范围");
-            return;
+            throw new Error("指定的起始点时间差超出了允许的范围"+JSON.stringify({
+                "startDate":startDate,
+                "endDate":endDate,
+                "duration":startEndConfig.duration
+            }));
         }
 
         this.option.startendList = [startDate, endDate].sort(function(a,b){
-            return a - b > 0;
+            return +new Date(a) - +new Date(b);
         });
         this.currentSelectDate = option.startendList[0];
 

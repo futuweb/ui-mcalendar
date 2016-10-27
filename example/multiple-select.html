@@ -32,7 +32,6 @@
     <script type="text/javascript">
         var d = new Date();
         var input = document.querySelector("#calendarValue");
-        var input2 = document.querySelector("#calendarValue2");
 
         var cal = new futuCalendar({
             wrapper:".wrapper",
@@ -43,9 +42,10 @@
             startEndDataFormat:"yyyy/MM/dd至yyyy/MM/dd",
             startEndConfig:{
                 allowStartDate:new Date("2016-"+(d.getMonth()+1)+"-01"),
-                allEndDate:new Date("2016-"+(d.getMonth()+1)+"-28"),
+                allEndDate:new Date("2016-"+(d.getMonth()+2)+"-02"),
                 duration:20,
                 itemClass:"startenditem",
+                defaultStartEnd:[new Date("2016-"+(d.getMonth()+1)+"-02"),new Date("2016-"+(d.getMonth()+1)+"-20")],
                 exceedDuration:function(duration){
                     alert("你选择的日期个数超标，共"+duration+"个日期");
                 }

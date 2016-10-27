@@ -4,6 +4,16 @@
 ## 兼容性说明
 适用于移动端浏览器
 
+## 特性
+
+1. 选择单个时间点
+2. 选择起始时间段
+3. 选择单个时间点时可指定能被选择的枚举日期
+4. 选择起始时间段时，指定能被选择的起始范围
+5. 支持自定义日历模板
+6. 支持自定义工具栏
+7. 支持与具体的input等元素绑定
+
 ## 安装
 
 ```sh
@@ -141,6 +151,9 @@ var cal = new futuCalendar({
 `indexCss.js`：打包后的源码,包含css，使用时**无需**手动引入`ui-calendar.css`
 
 `readme.md`：说明文档
+
+
+**在ui-mcalendar目录下运行 `$ npm start`命令，即可在浏览器中看到目录机构**
 
 ## API
 #### 1. `futuCalendar(config)`
@@ -280,13 +293,15 @@ var cal = new futuCalendar({
        **类型：** JSON
 	   
        **说明：** 日历允许选择的起始时间段时的配置JSON
-	   
-	       - `startEndConfig.allowStartDate`: 选择时间段时，能选择的最小日期, 类型为Date
-	       - `startEndConfig.allEndDate`: 选择时间段时，能选择的最大日期， 类型为Date
-		   - `startEndConfig.duration`: 选择的时间段包含的日期个数最大值；用户选择的2个时间区间大于该值时会触发exceedDuration函数， 类型为Number
+		   
+	       - `startEndConfig.allowStartDate`: 选择时间段时，能选择的最小日期, 类型为Date。
+	       - `startEndConfig.allEndDate`: 选择时间段时，能选择的最大日期， 类型为Date。
+		   - `startEndConfig.duration`: 选择的时间段包含的日期个数最大值；用户选择的2个时间区间大于该值时会触发exceedDuration函数， 类型为Number。
+		   - `startEndConfig.defaultStartEnd`:  默认选择的起始时间点，`[start,end]`,类型为数组，长度为2，元素为可实例化为Date，对象的变量;`start`和`end`必须在`startEndConfig.allEndDate`和`startEndConfig.allEndDate`间，且时间间隔小于或者等于`startEndConfig.duration`，否则视为无效设置。
 	   	   - `startEndConfig.itemClass`: 选择的时间区间中的日期的className,用户可设置为其他值以改变样式，默认为"startenditem"。
 	   	   - `startEndConfig.exceedDuration(num,item)`: 用户选择的2个时间区间大于该值时会触发此函数，选择的区间不会生效，回调函数包含2个参数。item表示用户第二次选择的日期元素，num表示用户选择的区间所包含的日期个数。
 	   	   
+		
 	   **默认配置**
 
 	   ```
@@ -536,9 +551,16 @@ demo:
 ## 开发
 1. 源码位于src/index.js，开发完成后在ui-mcalendar目录下运营`gulp`命令，生成根目录下的index.js。
 2. 实例项目examples中，使用script标签的方式引入，可直接运行。
-3. 依赖`underscore.js`,开发过程中已进行打包，无需重复引入
+3. 依赖`underscore.js`,开发过程中已进行打包，无需重复引入。
+4. 在ui-mcalendar目录下运行 `$ npm start`命令即开启一个`http-server`。
 
 ## 版本记录
+
+### 1.1.5 2016-10-27
+- 选择时间段时，增加参数`startEndConfig.defaultStartEnd`,用于设置默认选则的时间段
+- 修复在没有设置`startEndConfig.allowStartDate`,`startEndConfig.allEndDate`时选择时间段不成功的问题
+- 解决ios闪烁效果
+- 解决IOS上日期排序不准确的问题
 
 ### 1.1.3 2016-10-24
 - 修正readme样式
