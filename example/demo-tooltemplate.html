@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8"/>
+        <meta name="format-detection" content="telephone=no"/>
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <meta name="renderer" content="webkit">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" >
+        <title>测试日历控件-选择起始点</title>
+        <link rel="stylesheet" type="text/css" href="../src/ui-mcalendar.css"/>
+        <style type="text/css" media="screen">
+            .futu-calendar{
+                margin: 0 auto;
+            }
+            .hello{
+                color: red!important;
+            }
+            #startend{
+                background-color: #efeff4;
+                height: 34px;
+                line-height: 34px;
+                margin: 0;
+                padding: 0;
+                text-align: center;
+            }
+            fr.
+        </style>
+    </head>
+    <body>
+        <input tpye="input" id="calendarValue" placeholder="请选择" />
+        <div class="wrapper"></div>
+    </body>
+    <script type="text/template" id="demo-tooltemplate">
+      <%_.each(toolList,function(item,i){%>
+         <a href='javascript:void(0)' tool-id='<%=i%>'  class='<%=item.className%>  tool-item'>按钮<%=item.text%></a>
+      <%})%>
+    </script>
+    <script type="text/javascript" src="../index.js?23452345234526"></script>
+    <script type="text/javascript">
+        var d = new Date();
+        var input = document.querySelector("#calendarValue");
+
+        var cal = new futuCalendar({
+            wrapper:".wrapper",
+            initshow: false,
+            autohide: false,
+            hasMask: true,
+            startEndSelect: true,
+            startEndDataFormat: "yyyy/MM/dd至yyyy/MM/dd",
+            showToolBar: true,
+            toolTemplateStr: function(){
+                return document.querySelector("#demo-tooltemplate").innerHTML;
+            },
+            //toolTemplateStr:document.querySelector("#demo-tooltemplate").innerHTML
+            toolList: [{
+                text:"最近一周",
+                className:"nearweak",
+                action:function(instance,item){
+                    instance.setSEPoints(+d - 6*24*3600*1000,d,function(){
+                    });
+                }
+            },
+            {
+                text:"关闭",
+                className:"nearweak2",
+                action:function(instance,item){
+                    instance.hide();
+                    item.classList.add("hello");
+                }
+            }],
+            valueTarget:input
+        });
+
+    </script>
+</html>

@@ -421,6 +421,8 @@ var CalendarUtil = {
          */
         toolList: [],
 
+        toolTemplateStr:"",
+
         // 是否显示工具栏
         showToolBar: false,
 
@@ -626,6 +628,16 @@ var CalendarUtil = {
         // 工具栏列表
         _option.toolList = option.toolList || [];
 
+        // 工具栏模板，可选
+        if (_.isString(option.toolTemplateStr)) {
+            _option.toolTemplateStr = option.toolTemplateStr;
+        } else if(_.isFunction(option.toolTemplateStr)){
+            var _toolTemplateStr = option.toolTemplateStr();
+            if(_.isString(_toolTemplateStr)) {
+                _option.toolTemplateStr = _toolTemplateStr;
+            }
+        }
+
         // 是否显示工具栏
         _option.showToolBar = Boolean(option.showToolBar);
 
@@ -789,16 +801,21 @@ var CalendarUtil = {
         var toolList = instance.option.toolList;
 
         var str = "";
-        toolList.forEach(function(item, i) {
-            item.className = item.className + " tool-item";
-            str = str + "<a href='javascript:void(0)' tool-id='"+i+"'  class='"+item.className+"'>" +
-                            item.text +
-                        "</a>";
 
-        });
+        if (instance.option.toolTemplateStr) {
+            str = instance.option.toolTemplateStr;
+        } else {
+            toolList.forEach(function(item, i) {
+                var className = item.className + " tool-item";
+                str = str + "<a href='javascript:void(0)' tool-id='"+i+"'  class='"+className+"'>" +
+                                item.text +
+                            "</a>";
+            });
+        }
 
         return _.template(str)({
-            calInfo: instance.calInfo
+            calInfo: instance.calInfo,
+            toolList:toolList
         });
     },
 
@@ -1035,7 +1052,7 @@ var CalendarUtil = {
         }
 
         dateList.map(function(item) {
-            var d;
+            var d = new Date(item.year, item.month - 1, item.date);
             item.classList = [classMap.normal];
 
             // 判断是否为可选择
@@ -1044,7 +1061,6 @@ var CalendarUtil = {
                 item.isCliable = true;
             } else {
                 // 部分可点击，则将日期准换为yyyy-MM-dd形式在enableMap中查找
-                d = new Date(item.year, item.month - 1, item.date);
                 if (enableMap[DateUtil.getFormatDate(d, "yyyy-MM-dd")]) {
                     item.classList = [classMap.normal, classMap.prominent];
                     item.isCliable = true;
@@ -1057,7 +1073,6 @@ var CalendarUtil = {
             if (Boolean(item.isLastMonth) || Boolean(item.isNextMonth)) {
                 item.classList.push(classMap.othermonth);
             } else {
-                d = new Date(item.year, item.month - 1, item.date);
                 item.classList.push(classMap.currentmonth);
 
                 // 今天
@@ -1318,7 +1333,10 @@ _.extend(futuCalendar.prototype, {
                 flagItem && flagItem.classList.add(option.classMap.startEndFlag);
             });
         } else {
+            // 保持日历的原始状态
+            var display = this.calendar.style.display;
             CalendarUtil.generateHTML(this, this.currentSelectDate);
+            this.calendar.style.display = display;
         }
 
         // 如果存在与日历绑定的元素，则将值设置进入该元素

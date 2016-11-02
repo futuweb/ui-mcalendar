@@ -231,13 +231,29 @@ var cal = new futuCalendar({
 	   
        **默认值：** false，默认不显示日历。
 
-	- `config.initshow`
+	- `config.hasMask`
 	   
        **类型：** Boolean
        
        **说明：** 是否显示mask。
 	   
        **默认值：** false，默认不显示遮罩。
+
+    - `config.toolTemplateStr`
+
+      **类型：** String 或者 Function
+
+      **说明：** 可选，用于自定义工具栏部分的模板。如果不设置，则所有按钮均使用`a`标签,class属性及文本内容。用户可通过此参数配置每个按钮更多属性。当此参数为Function时，必须返回一个字符串作为模板。示例如下：
+
+      ```
+          <script type="text/template" id="demo-tooltemplate">
+              <%_.each(toolList,function(item,i){%>
+                 <a href='javascript:void(0)' name='test' age='27' tool-id='<%=i%>'  class='<%=item.className%>  tool-item'>按钮<%=item.text%></a>
+              <%})%>
+          </script>
+      ```
+
+      **默认值：** 空
 
     - `config.toolList`
        
@@ -301,7 +317,6 @@ var cal = new futuCalendar({
 	   	   - `startEndConfig.itemClass`: 选择的时间区间中的日期的className,用户可设置为其他值以改变样式，默认为"startenditem"。
 	   	   - `startEndConfig.exceedDuration(num,item)`: 用户选择的2个时间区间大于该值时会触发此函数，选择的区间不会生效，回调函数包含2个参数。item表示用户第二次选择的日期元素，num表示用户选择的区间所包含的日期个数。
 	   	   
-		
 	   **默认配置**
 
 	   ```
@@ -556,10 +571,14 @@ demo:
 
 ## 版本记录
 
+### 1.1.6 2016-11-02
+- 增加参数用于自定义工具栏模板
+- 其他细节改进 
+
 ### 1.1.5 2016-10-27
 - 选择时间段时，增加参数`startEndConfig.defaultStartEnd`,用于设置默认选则的时间段
 - 修复在没有设置`startEndConfig.allowStartDate`,`startEndConfig.allEndDate`时选择时间段不成功的问题
-- 解决ios闪烁效果
+- 解决IOS闪烁效果
 - 解决IOS上日期排序不准确的问题
 
 ### 1.1.3 2016-10-24
