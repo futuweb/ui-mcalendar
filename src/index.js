@@ -857,7 +857,7 @@ var CalendarUtil = {
     addItemsClass: function(instance, startDate, endDate, className) {
         var start = instance.getItemIndexByDate(startDate);
         var end = instance.getItemIndexByDate(endDate);
-        end < start ? 42 : end;
+        end = end < start ? 42 : end;
 
         var item;
         for (var i = start; i <= end; i++) {
