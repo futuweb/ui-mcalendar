@@ -195,8 +195,8 @@ var DateUtil = {
      */
     isIntheDistance: function(targetDate,startDate,endDate){
 
-        startDate = startDate || "1970-01-01";
-        endDate = endDate || "9999-12-30";
+        startDate = startDate || "1970/01/01";
+        endDate = endDate || "9999/12/30";
 
         targetDate = _.isDate(targetDate) ? targetDate : new Date(targetDate);
         startDate = _.isDate(startDate) ? startDate : new Date(startDate);
@@ -1281,7 +1281,7 @@ _.extend(futuCalendar.prototype, {
      * @param {Date}     endDate   [结束时间]
      * @param {Function} callback  [回调函数]
      */
-    setSEPoints: function(startDate,endDate,callback){
+    setSEPoints: function(startDate,endDate,callback,showEndMonth){
         var option = this.option,
             startEndConfig = this.option.startEndConfig,
             wrapper = this.calendar;
@@ -1316,7 +1316,7 @@ _.extend(futuCalendar.prototype, {
         this.option.startendList = [startDate, endDate].sort(function(a,b){
             return +new Date(a) - +new Date(b);
         });
-        this.currentSelectDate = option.startendList[0];
+        this.currentSelectDate = option.startendList[Boolean(showEndMonth) ? 1 : 0];
 
         // 设置的起始日期在当前显示的日历中
         if (this.calInfo.current.month - 1 == this.currentSelectDate.getMonth()) {

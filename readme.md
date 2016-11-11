@@ -491,11 +491,11 @@ cal.setCliableList(["2016-09-22","2016-09-23"],function(item){
 **参数：** 当date为日期时，如果当前日期未在当前日历上显示，则返回空；当date为数值时，则返回42个日期元素中的指定dom元素。
 **return：** Element,对应的日期DOM元素
 
-#### 11. `futuCalendar#setSEPoints(startDate,endDate,callback)`
+#### 11. `futuCalendar#setSEPoints(startDate,endDate,callback,showEndMonth)`
 
 **说明：**在开启选取起始点功能时，设置指定起始点间的日期被选中,注意，此时会限制于`config.startencconfig`中的设置,否则会抛出异常
 
-**参数：** `startDate`为时间段的起始日期，`endDate`为结束日期，`startDate`和`endDate`为Date实例或者可以实例化为Date对象的变量（时间戳或者日期字符串），`callback`为设置之后的回调函数，回调函数参数为当前日历实例
+**参数：** `startDate`为时间段的起始日期，`endDate`为结束日期，`startDate`和`endDate`为Date实例或者可以实例化为Date对象的变量（时间戳或者日期字符串），`callback`为设置之后的回调函数，回调函数参数为当前日历实例。`showEndMonth`:设置起始日期之后，是否显示当前日历为结束月的日历；`true`时显示设置的结束日期所在月的日历，`false`时显示开始时间所在月的日历。
 
 **return：** this，当前日历实例，
 
@@ -570,6 +570,11 @@ demo:
 4. 在ui-mcalendar目录下运行 `$ npm start`命令即开启一个`http-server`。
 
 ## 版本记录
+
+### 1.1.8 2016-11-11
+-  增加参数用于设置时间段时，显示的是开始月还是结算月
+
+
 ### 1.1.7 2016-11-10
 - 修复重复选择时间段时日期不被选中的问题
 
