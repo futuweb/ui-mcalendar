@@ -41,27 +41,26 @@
             startEndSelect: true,
             startEndDataFormat:"yyyy/MM/dd至yyyy/MM/dd",
             startEndConfig:{
-                allowStartDate:new Date("2016-"+(d.getMonth()+1)+"-01"),
+                allowStartDate:new Date("2016-01-01"),
                 allEndDate:new Date("2016-"+(d.getMonth()+2)+"-02"),
-                duration:20,
+                duration:90,
                 itemClass:"startenditem",
-                defaultStartEnd:[new Date("2016-"+(d.getMonth()+1)+"-02"),new Date("2016-"+(d.getMonth()+1)+"-20")],
                 exceedDuration:function(duration){
                     alert("你选择的日期个数超标，共"+duration+"个日期");
                 }
             },
             showToolBar:true,
             toolList:[{
-                text:"最近一周",
+                text:"最近3周",
                 className:"nearweak",
                 action:function(instance,item){
-                    instance.setSEPoints(d,+d + 6*24*3600*1000,function(){});
+                    instance.setSEPoints(new Date("2016-10-20"),new Date("2016-11-11") ,function(){},false);
                 }
             },{
-                text:"关闭",
+                text:"最近3月",
                 className:"closeCalendar",
                 action:function(instance,item){
-                    instance.hide();
+                    instance.setSEPoints(new Date("2016-08-14"),new Date("2016-11-11") ,function(){},true);
                 }
             }],
             valueTarget:input,

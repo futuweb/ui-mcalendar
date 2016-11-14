@@ -974,6 +974,7 @@ var CalendarUtil = {
 
                 // 非可点击元素
                 if (!classList.contains(option.classMap.normal)) {
+                    e.stopPropagation(true);
                     return;
                 }
 
