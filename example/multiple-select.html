@@ -32,7 +32,6 @@
     <script type="text/javascript">
         var d = new Date();
         var input = document.querySelector("#calendarValue");
-
         var cal = new futuCalendar({
             wrapper:".wrapper",
             initshow: false,
@@ -41,8 +40,8 @@
             startEndSelect: true,
             startEndDataFormat:"yyyy/MM/dd至yyyy/MM/dd",
             startEndConfig:{
-                allowStartDate:new Date("2016-01-01"),
-                allEndDate:new Date("2016-"+(d.getMonth()+2)+"-02"),
+                allowStartDate:new Date(d.getFullYear()+"/01/01"),
+                allEndDate:new Date(d.getFullYear()+"/12/31"),
                 duration:90,
                 itemClass:"startenditem",
                 exceedDuration:function(duration){
