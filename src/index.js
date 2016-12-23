@@ -198,9 +198,9 @@ var DateUtil = {
         startDate = startDate || "1970/01/01";
         endDate = endDate || "9999/12/30";
 
-        targetDate = _.isDate(targetDate) ? targetDate : new Date(targetDate);
-        startDate = _.isDate(startDate) ? startDate : new Date(startDate);
-        endDate = _.isDate(endDate) ? endDate : new Date(endDate);
+        targetDate = new Date(targetDate);
+        startDate =  new Date(startDate);
+        endDate = new Date(endDate);
 
         if (!_.isDate(targetDate) || !_.isDate(startDate) || !_.isDate(endDate)) {
             return false;
@@ -383,7 +383,7 @@ var CalendarUtil = {
         templateStr: require("../templates/mcalendar.html"),
 
         // 默认包含日历的元素
-        wrapper: window.document.body,
+        wrapper: '',
 
         // valueTarget,与日历绑定的元素，在选择某个日期后，将值付给该元素
         valueTarget: null,
@@ -546,6 +546,8 @@ var CalendarUtil = {
             _option.wrapper = option.wrapper;
         } else if (_.isElement(BASE.$(option.wrapper))) {
             _option.wrapper = BASE.$(option.wrapper);
+        } else {
+            throw new Error('the wrapper of mcalnedar should be a valid selector or Element which exists in document;place check your config!');
         }
 
         // 处理星期名称

@@ -54,7 +54,7 @@
         var d = new Date();
         var input = document.querySelector("#calendarValue");
         var input2 = document.querySelector("#calendarValue2");
-
+        var year = d.getFullYear();
         var cal = new futuCalendar({
             wrapper:".wrapper",
             initshow: false,
@@ -63,8 +63,8 @@
             startEndSelect: true,
             startEndDataFormat:"yyyy/MM/dd至yyyy/MM/dd",
             startEndConfig:{
-                allowStartDate:new Date("2016-"+(d.getMonth()+1)+"-01"),
-                allEndDate:new Date("2016-"+(d.getMonth()+1)+"-28"),
+                allowStartDate:new Date(year+"-12-01"),
+                allEndDate:new Date(year+"-12-30"),
                 duration:20,
                 itemClass:"startenditem",
                 exceedDuration:function(duration){
