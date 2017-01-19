@@ -340,7 +340,7 @@ var DateUtil = {
             ++index;
         }
 
-        // 记录挡圈开始时的索引
+        // 记录当前月开始时的索引
         var startIndex = index;
         for (i = 0; i < dayCount; ++i) {
             info[index] = {
@@ -862,7 +862,7 @@ var CalendarUtil = {
         end = end < start ? 42 : end;
 
         var item;
-        for (var i = start; i <= end; i++) {
+        for (var i = start; i < end; i++) {
             item = instance.getItem(i);
             item && item.classList.add(className);
         }
@@ -1398,17 +1398,17 @@ _.extend(futuCalendar.prototype, {
      */
     getItemIndexByDate: function(date) {
 
+        date = _.isDate(date) ? date : new Date(date);
+
         // 非法日期
         if(!_.isDate(date)) {
             return -1;
         }
 
-        date = _.isDate(date) ? date : new Date(date);
-
         var month = date.getMonth() + 1;
         var currentM = +this.calInfo.current.month;
         // 当前日期不在显示的日历上
-        if( Math.abs(month - currentM) > 1) {
+        if( Math.abs(month - currentM) > 1 && Math.abs(month - currentM) !== 11 && Math.abs(date.getFullYear(),+this.calInfo.current.year) > 1) {
             return -1;
         }
 
@@ -1419,17 +1419,19 @@ _.extend(futuCalendar.prototype, {
         if (month === currentM) {
             itemIndex = dateIndex + this.calInfo.startIndex - 1;
 
-        // 上月日期
-        } else if (month < currentM) {
+            // 上月日期
+        } else if ( (month < currentM && date.getFullYear() === +this.calInfo.current.year) || (month === 12 && currentM === 1)) {
             for (var i = 0; i < this.calInfo.startIndex; i++) {
                 if (this.calInfo.list[i].date === dateIndex) {
                     itemIndex = i;
                 }
             }
 
-        // 下月日期
-        } else {
+            // 下月日期
+        } else if ((month > currentM  && date.getFullYear() === +this.calInfo.current.year) || (month === 1 && currentM === 12)) {
             itemIndex = dateIndex + this.calInfo.endIndex;
+        } else {
+            return -1;
         }
 
         return itemIndex;

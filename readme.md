@@ -17,7 +17,7 @@
 ## 安装
 
 ```sh
- npm install ui-mcalendar
+ npm install ui-mcalendar --save
 ```
 
 ## 使用
@@ -570,6 +570,9 @@ demo:
 4. 在ui-mcalendar目录下运行 `$ npm start`命令即开启一个`http-server`。
 
 ## 版本记录
+
+### 1.2.1 2017-01-19
+- 修复选择跨年日期段的显示问题
 
 ### 1.2.0 2016-12-23
 -  代码健壮，不直接使用通过配置传入的日期对象，而是重新实例化

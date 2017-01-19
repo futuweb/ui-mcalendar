@@ -55,7 +55,7 @@
         var month = ("00" + (new Date().getMonth()+1)).substr(-2);
         var input = document.querySelector("#calendarValue");
         var input2 = document.querySelector("#calendarValue2");
-
+        var year = new Date().getFullYear();
         var cal = new futuCalendar({
             wrapper:".wrapper",
             initshow: false,
@@ -64,7 +64,7 @@
             dataFormat: "yyyy/MM/dd",
             valueTarget: input,
             templateStr: document.querySelector("#templatedemo").innerHTML,
-            enableList: ["2016-"+month+"-01","2016-"+month+"-02"],
+            enableList: [year+"-"+month+"-01",year+"-"+month+"-02"],
             selectMonth: function(instance,info,offset){
                 console.log(info);
             },
