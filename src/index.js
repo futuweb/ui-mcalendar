@@ -1161,6 +1161,7 @@ _.extend(futuCalendar.prototype, {
         this.calendar.style.display = "block";
         if (!!this.mask) {
            this.mask.style.display = "block";
+           BASE.$("html").classList.add("futu-calendar-hiddenscroll");
         }
         _.isFunction(callback) && callback(this);
 
@@ -1176,7 +1177,8 @@ _.extend(futuCalendar.prototype, {
     hide: function(callback) {
         this.calendar.style.display = "none";
         if (!!this.mask) {
-           this.mask.style.display = "none";
+            BASE.$("html").classList.remove("futu-calendar-hiddenscroll");
+            this.mask.style.display = "none";
         }
         _.isFunction(callback) && callback(this);
 

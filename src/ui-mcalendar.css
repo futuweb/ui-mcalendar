@@ -9,6 +9,14 @@
 html{
     -webkit-tap-highlight-color: transparent;
 }
+
+/* 隐藏html的滚动条 */
+html.futu-calendar-hiddenscroll,
+html.futu-calendar-hiddenscroll body{
+    height: 100%;
+    overflow: hidden;
+}
+
 .futu-calendar *{
     box-sizing: content-box!important;;
 }
