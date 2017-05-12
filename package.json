@@ -1,7 +1,7 @@
 {
   "name": "ui-mcalendar",
-  "version": "1.2.2",
-  "description": "日期组件",
+  "version": "1.2.3",
+  "description": "移动端日期组件",
   "main": "webpack.config.js",
   "directories": {
     "example": "example"

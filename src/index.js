@@ -1016,6 +1016,10 @@ var CalendarUtil = {
             e.stopPropagation(true);
         });
 
+        BASE.addEventLister(instance.mask,"touchmove",function(e){
+            e.preventDefault();
+        });
+
         // 点击其他地方时，隐藏日历
         BASE.addEventLister(document, "tap", function(e) {
             var cal = null;
@@ -1161,7 +1165,7 @@ _.extend(futuCalendar.prototype, {
         this.calendar.style.display = "block";
         if (!!this.mask) {
            this.mask.style.display = "block";
-           BASE.$("html").classList.add("futu-calendar-hiddenscroll");
+           // BASE.$("html").classList.add("futu-calendar-hiddenscroll");
         }
         _.isFunction(callback) && callback(this);
 
@@ -1177,7 +1181,7 @@ _.extend(futuCalendar.prototype, {
     hide: function(callback) {
         this.calendar.style.display = "none";
         if (!!this.mask) {
-            BASE.$("html").classList.remove("futu-calendar-hiddenscroll");
+            // BASE.$("html").classList.remove("futu-calendar-hiddenscroll");
             this.mask.style.display = "none";
         }
         _.isFunction(callback) && callback(this);
